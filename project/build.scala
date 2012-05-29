@@ -2,6 +2,8 @@ import sbt._
 
 import Keys._
 import AndroidKeys._
+import sbtassembly.Plugin._
+import AssemblyKeys._
 
 object Settings {
   lazy val common = Defaults.defaultSettings ++ Seq (
@@ -11,8 +13,9 @@ object Settings {
    )
 
   lazy val desktop = Settings.common ++ Seq (
+    mainClass in Compile := Some("org.gvaya.ssii.MyGame"),
     fork in Compile := true
-  )
+  ) ++ assemblySettings :_*
 
   lazy val android = Settings.common ++
     AndroidProject.androidSettings ++
@@ -79,7 +82,7 @@ object LibgdxBuild extends Build {
 
   lazy val desktop = Project (
     "desktop",
-    file("desktop"),
+    file("desktop"), dependsOn(common),
     settings = Settings.desktop
   ) dependsOn common
 
