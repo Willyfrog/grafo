@@ -30,6 +30,7 @@ class MyGame extends ApplicationListener {
     Gdx.app.log("Info", "Fin de lainicializacion de la aplicacion")
   }
   override def render() {
+    var v:Vertice = null
     Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 0.5f)
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
 
@@ -43,7 +44,7 @@ class MyGame extends ApplicationListener {
       if (constructor==null)
         constructor= new ProtoArista
 
-      val v:Vertice = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y)
+      v = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y)
       if (v!=null){
         constructor.addVertice(v)
       }
@@ -56,7 +57,12 @@ class MyGame extends ApplicationListener {
     }
 
     if (Gdx.input.isButtonPressed(Buttons.RIGHT)){
-      val v:Vertice = new Vertice(unprojectedVertex.x, unprojectedVertex.y, "b")
+      v = null //por si acaso acarreamos de antes
+      unprojectedVertex.set(Gdx.input.getX(),Gdx.input.getY(), 0 )
+      cam.unproject(unprojectedVertex)
+      v = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y) //toca vertice?
+      if (v==null)
+        v = new Vertice(unprojectedVertex.x, unprojectedVertex.y, "b")
       g.addVertice(v) //TODO: generador de etiquetas
       if (constructor!=null)
         constructor.addVertice(v)
