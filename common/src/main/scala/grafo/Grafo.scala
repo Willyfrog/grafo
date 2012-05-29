@@ -3,6 +3,7 @@ package grafo
 import collection.mutable.ArrayBuffer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
+import com.badlogic.gdx.Gdx
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,6 +41,7 @@ class Grafo {
   def tocandoVertice(x1:Float, y1:Float):Vertice={
     for (v<-vertices){
       if (v.distance(x1,y1) <= 10){
+        Gdx.app.log("DEBUG", "Tocando a " + v.etiqueta)
         return v
       }
     }

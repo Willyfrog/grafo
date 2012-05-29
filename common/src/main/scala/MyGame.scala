@@ -41,7 +41,7 @@ class MyGame extends ApplicationListener {
       unprojectedVertex.set(Gdx.input.getX(),Gdx.input.getY(), 0 )
       cam.unproject(unprojectedVertex)
 
-      if (constructor==null)
+      if (constructor==null) //solo puede comenzar una arista si pulsamos con el izdo.
         constructor= new ProtoArista
 
       v = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y)

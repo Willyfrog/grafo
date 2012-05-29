@@ -23,7 +23,7 @@ class ProtoArista {
   def addVertice(v:Vertice){
     if (origen==null)
       origen=v
-    else
+    else if (origen!=v)
       destino=v
   }
 

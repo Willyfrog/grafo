@@ -13,9 +13,10 @@ object Settings {
    )
 
   lazy val desktop = Settings.common ++ Seq (
-    mainClass in Compile := Some("org.gvaya.ssii.MyGame"),
+    mainClass in Compile := Some("org.gvaya.ssii.Main"),
+    mainClass in assembly := Some("org.gvaya.ssii.Main"),
     fork in Compile := true
-  ) ++ assemblySettings :_*
+  ) ++ assemblySettings
 
   lazy val android = Settings.common ++
     AndroidProject.androidSettings ++
@@ -30,8 +31,6 @@ object Settings {
   val updateLibgdx = TaskKey[Unit]("update-gdx", "Updates libgdx")
 
   val updateLibgdxTask = updateLibgdx <<= streams map { (s: TaskStreams) =>
-    import Process._
-    import java.io._
     import java.net.URL
     
     // Declare names
@@ -82,8 +81,7 @@ object LibgdxBuild extends Build {
 
   lazy val desktop = Project (
     "desktop",
-    file("desktop"), dependsOn(common),
-    settings = Settings.desktop
+    file("desktop"), settings = Settings.desktop
   ) dependsOn common
 
   lazy val android = Project (
