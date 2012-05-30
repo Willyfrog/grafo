@@ -17,7 +17,5 @@ class Vertice(x: Float, y: Float, val etiqueta: String) extends Nodo(x, y) {
     shape.circle(x,y, 3.0f)
   }
 
-  def distance(x1:Float,y1:Float): Double = sqrt(pow(x1-x,2)+pow(y1-y,2))
-
 
 }

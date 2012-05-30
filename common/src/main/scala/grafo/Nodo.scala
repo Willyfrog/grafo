@@ -2,6 +2,7 @@ package grafo
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import math.{sqrt, pow}
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,4 +18,6 @@ class Nodo(val x: Float, val y: Float) {
   def coordenadas(): List[Float] = {
     return List(x, y, z)
   }
+
+  def distance(x1:Float,y1:Float): Double = sqrt(pow(x1-x,2)+pow(y1-y,2))
 }

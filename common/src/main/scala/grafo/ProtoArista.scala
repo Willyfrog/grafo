@@ -18,9 +18,26 @@ class ProtoArista {
   var nodos:ArrayBuffer[Nodo] = ArrayBuffer[Nodo]()
 
   def addNodo(x:Float, y:Float){
-
-    if (!intersectaSegmentos(x,y))
-      nodos.append(new Nodo(x,y))
+    var add = true
+    if( !nodos.isEmpty){
+      if (nodos.last.distance(x,y)>=5){
+        if (!intersectaSegmentos(x,y))
+        {
+          nodos.append(new Nodo(x,y))
+        }
+        else {
+          //Gdx.app.log("choca!", "pero le seguimos queriendo por temas de debug")
+          add = false
+        }
+      }
+      else
+        add = false
+    }
+    else if (origen.distance(x,y)<5)
+    {
+      add = false
+    }
+    if (add) nodos.append(new Nodo(x,y))
   }
 
   def intersectaSegmentos(x:Float,y:Float):Boolean={
@@ -30,7 +47,7 @@ class ProtoArista {
       val last = lastCoords()
       for (e <- lis ){
         intersecta |= Util.interseccion(e._1,e._2, last, (x, y))
-        if (intersecta) Gdx.app.log("Corte", e.toString() + " - " + (last, (x,y)).toString())
+        //if (intersecta) Gdx.app.log("Corte", e.toString() + " - " + (last, (x,y)).toString())
       }
     }
     return intersecta
@@ -54,7 +71,7 @@ class ProtoArista {
       }
 
     }
-    Gdx.app.log("lista segmentos:", bl.toString())
+    //Gdx.app.log("lista segmentos:", bl.toString())
     return bl
   }
 
@@ -71,6 +88,9 @@ class ProtoArista {
   }
 
   def toArista():Arista={
+    Gdx.app.log("Lista Segmentos:", listaSegmentos().toString())
+    val str = for (n <- nodos) yield n.coordenadas()
+    Gdx.app.log("Lista Nodos", str.toString())
     if (!estaCompleta)
       return null
     else
