@@ -17,8 +17,19 @@ class MyGame extends ApplicationListener {
   var shape:ShapeRenderer = null
   var g:Grafo = null
   var constructor:ProtoArista = null
+  var lastLabel:Int = 0
 
   def needsGL20():Boolean = false
+
+  def genLabel():String={
+    lastLabel+=1
+    if (lastLabel<=26)
+      return 'a'.to('z')(lastLabel).toString
+    else if (lastLabel<=52)
+      return 'A'.to('Z')(lastLabel-26).toString
+    else
+      return (lastLabel-52).toString
+  }
 
   override def create() {
     Gdx.app.log("Info", "Inicializando aplicacion")
@@ -31,7 +42,7 @@ class MyGame extends ApplicationListener {
   }
   override def render() {
     var v:Vertice = null
-    Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 0.5f)
+    Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f)
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
 
     cam.update()
@@ -49,7 +60,7 @@ class MyGame extends ApplicationListener {
         constructor.addVertice(v)
       }
       else if (constructor.estaVacia){
-        constructor.addVertice(new Vertice(unprojectedVertex.x, unprojectedVertex.y, "a")) //TODO: generador de etiquetas
+        constructor.addVertice(new Vertice(unprojectedVertex.x, unprojectedVertex.y, genLabel()))
       }
       else{
         constructor.addNodo(unprojectedVertex.x, unprojectedVertex.y)
@@ -63,7 +74,7 @@ class MyGame extends ApplicationListener {
       v = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y) //toca vertice?
       if (v==null)
         v = new Vertice(unprojectedVertex.x, unprojectedVertex.y, "b")
-      g.addVertice(v) //TODO: generador de etiquetas
+      g.addVertice(v)
       if (constructor!=null)
         constructor.addVertice(v)
     }

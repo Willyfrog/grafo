@@ -18,6 +18,9 @@ class Grafo {
   val aristas:ArrayBuffer[Arista] = new ArrayBuffer[Arista]()
 
   def addArista(a:Arista){
+
+
+
     aristas.append(a)
     if (!vertices.contains(a.origen))
       addVertice(a.origen)
@@ -31,9 +34,11 @@ class Grafo {
 
   def drawIntoShapeRenderer(shape:ShapeRenderer){
     shape.begin(ShapeType.Line)
+    shape.setColor(0f,1f,0.9f,1f)
     for (a<-aristas) a.drawIntoShapeRenderer(shape)
     shape.end()
     shape.begin(ShapeType.Circle)
+    shape.setColor(1f,0f,0.9f,1f)
     for (v<-vertices) v.drawIntoShapeRenderer(shape)
     shape.end()
   }
@@ -41,7 +46,7 @@ class Grafo {
   def tocandoVertice(x1:Float, y1:Float):Vertice={
     for (v<-vertices){
       if (v.distance(x1,y1) <= 10){
-        Gdx.app.log("DEBUG", "Tocando a " + v.etiqueta)
+        //Gdx.app.log("DEBUG", "Tocando a " + v.etiqueta)
         return v
       }
     }

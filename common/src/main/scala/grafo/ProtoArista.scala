@@ -2,6 +2,7 @@ package grafo
 
 import collection.mutable.ArrayBuffer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.Gdx
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +18,49 @@ class ProtoArista {
   var nodos:ArrayBuffer[Nodo] = ArrayBuffer[Nodo]()
 
   def addNodo(x:Float, y:Float){
-    nodos.append(new Nodo(x,y))
+
+    if (!intersectaSegmentos(x,y))
+      nodos.append(new Nodo(x,y))
+  }
+
+  def intersectaSegmentos(x:Float,y:Float):Boolean={
+    var intersecta:Boolean = false
+    if (!nodos.isEmpty){
+      val lis = listaSegmentos()
+      val last = lastCoords()
+      for (e <- lis ){
+        intersecta |= Util.interseccion(e._1,e._2, last, (x, y))
+        if (intersecta) Gdx.app.log("Corte", e.toString() + " - " + (last, (x,y)).toString())
+      }
+    }
+    return intersecta
+  }
+
+  def lastCoords():(Float,Float)={
+    if (!nodos.isEmpty)
+      return (nodos.last.x, nodos.last.y)
+    else
+      return (origen.x, origen.y)
+  }
+
+  def listaSegmentos():ArrayBuffer[((Float,Float),(Float,Float))]={
+    var bl:ArrayBuffer[((Float,Float),(Float,Float))] = ArrayBuffer[((Float,Float),(Float,Float))]()
+    if (!nodos.isEmpty){
+      var o = (origen.x, origen.y)
+      for (n<-nodos){
+        bl.append((o,(n.x,n.y)))
+        o = (n.x, n.y)
+
+      }
+
+    }
+    Gdx.app.log("lista segmentos:", bl.toString())
+    return bl
+  }
+
+  def listaCoordenadasNodos(): List[Float] = {
+    //Goes through nodes and append coordinates as a list
+    return (for (n <- nodos) yield n.coordenadas()).toList.flatten
   }
 
   def addVertice(v:Vertice){

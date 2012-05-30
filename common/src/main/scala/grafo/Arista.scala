@@ -34,7 +34,7 @@ class Arista(val origen: Vertice, val destino: Vertice, nodos: Array[Nodo] = Arr
     return mesh
   }
 
-  def etiqueta():String = origen.etiqueta + destino.etiqueta
+  def etiqueta():String = origen.etiqueta + "_" +destino.etiqueta
 
   def drawIntoShapeRenderer(shape:ShapeRenderer){
     var ox = origen.x
