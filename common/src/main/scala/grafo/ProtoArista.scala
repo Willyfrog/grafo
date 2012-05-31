@@ -20,7 +20,7 @@ class ProtoArista {
   def addNodo(x:Float, y:Float){
     var add = true
     if( !nodos.isEmpty){
-      if (nodos.last.distance(x,y)>=5){
+      if (nodos.last.distance(x,y)>=Util.DISTANCE){
         if (!intersectaSegmentos(x,y))
         {
           nodos.append(new Nodo(x,y))
@@ -33,7 +33,7 @@ class ProtoArista {
       else
         add = false
     }
-    else if (origen.distance(x,y)<5)
+    else if (origen.distance(x,y)< Util.DISTANCE)
     {
       add = false
     }

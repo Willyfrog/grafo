@@ -45,7 +45,7 @@ class Grafo {
 
   def tocandoVertice(x1:Float, y1:Float):Vertice={
     for (v<-vertices){
-      if (v.distance(x1,y1) <= 10){
+      if (v.distance(x1,y1) <= Util.DISTANCE){
         //Gdx.app.log("DEBUG", "Tocando a " + v.etiqueta)
         return v
       }

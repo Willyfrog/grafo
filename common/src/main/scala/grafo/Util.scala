@@ -12,6 +12,8 @@ import com.badlogic.gdx.Gdx
 
 object Util {
 
+  val DISTANCE = 10
+
   def mismoSigno(x:Float,y:Float):Boolean={
     ((x>=0 && y>=0) || (x<=0 && y<=0))
   }
