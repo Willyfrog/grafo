@@ -33,7 +33,7 @@ object Util {
     val sig1 = mismoSigno(area2(a1,a2,b1),area2(a1,a2,b2))
     val sig2 = mismoSigno(area2(b1,b2,a1),area2(b1,b2,a2))
     Gdx.app.log("Resultado: estan al mismo lado: ", (sig1, sig2).toString())
-    return  !sig1 || !sig2
+    return  !(sig1 || sig2)
   }
 
 }
