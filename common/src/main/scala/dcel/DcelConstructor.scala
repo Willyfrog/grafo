@@ -11,7 +11,7 @@ import grafo.Arista
  * To change this template use File | Settings | File Templates.
  */
 
-class Dcel {
+class DcelConstructor {
   var lvertices:ArrayBuffer[Vertex] = new ArrayBuffer[Vertex]()
   var laristas:ArrayBuffer[Edge] = new ArrayBuffer[Edge]()
   var lcaras:ArrayBuffer[Face] = new ArrayBuffer[Face]()
@@ -35,4 +35,7 @@ class Dcel {
     lcaras.append(f)
   }
 
+  def calcularInformacion(){
+
+  }
 }
