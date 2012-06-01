@@ -17,15 +17,20 @@ class Grafo {
   val vertices:ArrayBuffer[Vertice] = new ArrayBuffer[Vertice]()
   val aristas:ArrayBuffer[Arista] = new ArrayBuffer[Arista]()
 
-  def addArista(a:Arista){
-
-
-
+  def addArista(a:Arista):Boolean={
+    var add:Boolean = true
+    for (aris<-aristas){
+      add &= !aris.intersectaConOtra(a)
+      if (!add)
+        return add
+    }
+    //si ha llegado hasta el final, no interseca
     aristas.append(a)
     if (!vertices.contains(a.origen))
       addVertice(a.origen)
     if (!vertices.contains(a.destino))
       addVertice(a.destino)
+    return add
   }
 
   def addVertice(v:Vertice){

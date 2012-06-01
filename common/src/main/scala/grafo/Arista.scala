@@ -3,6 +3,7 @@ package grafo
 import com.badlogic.gdx.graphics.{VertexAttribute, Mesh}
 import com.badlogic.gdx.graphics.VertexAttributes.Usage
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import collection.mutable.ArrayBuffer
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,5 +46,40 @@ class Arista(val origen: Vertice, val destino: Vertice, nodos: Array[Nodo] = Arr
       oy = n.y
     }
     shape.line(ox, oy, destino.x, destino.y)
+  }
+
+
+  def lastCoords():(Float,Float)={
+    if (!nodos.isEmpty)
+      return (nodos.last.x, nodos.last.y)
+    else
+      return (origen.x, origen.y)
+  }
+
+  def listaSegmentos():ArrayBuffer[((Float,Float),(Float,Float))]={
+    var bl:ArrayBuffer[((Float,Float),(Float,Float))] = ArrayBuffer[((Float,Float),(Float,Float))]()
+    var o:(Float,Float) = (origen.x, origen.y)
+    if (!nodos.isEmpty){
+      for (n<-nodos){
+        bl.append((o,(n.x,n.y)))
+        o = (n.x, n.y)
+      }
+    }
+    bl.append((o,(destino.x, destino.y))) //como poco hay un segmento origen-destino
+    //Gdx.app.log("lista segmentos:", bl.toString())
+    return bl
+  }
+
+  def intersectaConOtra(otra:Arista):Boolean={
+    val otral = otra.listaSegmentos()
+    val lis = listaSegmentos()
+    for (s<-lis){
+      for (os<-otral){
+        if (Util.interseccion(s._1,s._2,os._1,os._2)){
+          return true // no seguimos comprobando si no hace falta
+        }
+      }
+    }
+    return false
   }
 }
