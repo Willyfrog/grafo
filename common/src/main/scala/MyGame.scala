@@ -74,9 +74,14 @@ class MyGame extends ApplicationListener {
       v = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y) //toca vertice?
       if (v==null)
         v = new Vertice(unprojectedVertex.x, unprojectedVertex.y, "b")
-      g.addVertice(v)
+
       if (constructor!=null)
-        constructor.addVertice(v)
+      {
+        if (constructor.addVertice(v))
+          g.addVertice(v)
+      }
+      else
+          g.addVertice(v) //si no estamos construyendo una arista, se añade el nodo
     }
 
     if (constructor!=null && constructor.estaCompleta)

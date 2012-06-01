@@ -80,11 +80,21 @@ class ProtoArista {
     return (for (n <- nodos) yield n.coordenadas()).toList.flatten
   }
 
-  def addVertice(v:Vertice){
+  def addVertice(v:Vertice):Boolean={
+    var res:Boolean = false
     if (origen==null)
+    {
       origen=v
+      res = true
+    }
     else if (origen!=v)
-      destino=v
+    {
+      if (!intersectaSegmentos(v.x, v.y)){
+        destino=v
+        res =true
+      }
+    }
+    return res
   }
 
   def toArista():Arista={
