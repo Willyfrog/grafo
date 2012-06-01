@@ -9,6 +9,7 @@ import com.badlogic.gdx.Input.Buttons
 import glutils.ShapeRenderer
 import glutils.ShapeRenderer.ShapeType
 import grafo.{Nodo, ProtoArista, Vertice, Grafo}
+import dcel.DcelConstructor
 
 class MyGame extends ApplicationListener {
 
@@ -16,6 +17,7 @@ class MyGame extends ApplicationListener {
   var unprojectedVertex:Vector3 = new Vector3()
   var shape:ShapeRenderer = null
   var g:Grafo = null
+  var dcg:DcelConstructor = null
   var constructor:ProtoArista = null
   var lastLabel:Int = 0
 

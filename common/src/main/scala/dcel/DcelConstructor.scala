@@ -1,7 +1,7 @@
 package dcel
 
 import collection.mutable.ArrayBuffer
-import grafo.Arista
+import grafo.{Grafo, Arista}
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +11,7 @@ import grafo.Arista
  * To change this template use File | Settings | File Templates.
  */
 
-class DcelConstructor {
+class DcelConstructor (val g:Grafo){
   var lvertices:ArrayBuffer[Vertex] = new ArrayBuffer[Vertex]()
   var laristas:ArrayBuffer[Edge] = new ArrayBuffer[Edge]()
   var lcaras:ArrayBuffer[Face] = new ArrayBuffer[Face]()
