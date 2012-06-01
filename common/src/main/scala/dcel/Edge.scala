@@ -9,7 +9,10 @@ package dcel
  */
 
 class Edge (val label:String, val origin:Vertex, val destiny:Vertex){
-  var face:Face = null
+  var fizd:Face = null
+  var fdcha:Face = null
+  var ccwo:Edge = null //siguiente counterclockwise en origen
+  var ccwd:Edge = null //siguiente counterclockwise en destino
   var angle:Double = 0
 
   def igual(other:Edge):Boolean={
