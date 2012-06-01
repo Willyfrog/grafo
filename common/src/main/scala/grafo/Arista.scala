@@ -6,25 +6,41 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import collection.mutable.ArrayBuffer
 
 /**
- * Created with IntelliJ IDEA.
- * User: guillermo
- * Date: 25/05/12
- * Time: 9:51
- * To change this template use File | Settings | File Templates.
+ * @author guillermo
+ * @since 25/05/12
  */
 
+/**
+ * Clase Arista
+ * @param origen Vertice de origen
+ * @param destino Vertice de destino
+ * @param nodos Listado de nodos intermedios si no es una linea recta entre origen y destino
+ */
 class Arista(val origen: Vertice, val destino: Vertice, nodos: Array[Nodo] = Array[Nodo]()) {
   var mesh: Mesh = null
 
+  /**
+   * Lista de Coordenadas de los nodos intermedios
+   * @return listado de las coordenadas de los nodos. esta lista tiene una longitud par al no ir en tuplas
+   */
   def listaCoordenadasNodos(): List[Float] = {
     //Goes through nodes and append coordinates as a list
     return (for (n <- nodos) yield n.coordenadas()).toList.flatten
   }
 
+  /**
+   * Lista de vertices y nodos.
+   * @return lista de longitud par desde el vertice origen al destino incluyendo nodos intermedios
+   */
   def getVertexList: List[Float] = {
     return origen.coordenadas ::: listaCoordenadasNodos() ::: destino.coordenadas
   }
 
+  /**
+   * Devuelve un mesh con la arista.
+   * @deprecated
+   * @return mesh de tipo linea
+   */
   def getMesh(): Mesh = {
     val len = 2 + nodos.length
     if (mesh == null) {
@@ -35,8 +51,16 @@ class Arista(val origen: Vertice, val destino: Vertice, nodos: Array[Nodo] = Arr
     return mesh
   }
 
+  /**
+   * etiqueta de la arista
+   * @return devuelve la etiqueta de la arista en forma origen_destino
+   */
   def etiqueta():String = origen.etiqueta + "_" +destino.etiqueta
 
+  /**
+   * Dado un shaperenderer, dibuja dentro la arista
+   * @param shape shaperenderer en el que dibujar la arista con los nodos intermedios
+   */
   def drawIntoShapeRenderer(shape:ShapeRenderer){
     var ox = origen.x
     var oy = origen.y
@@ -48,14 +72,10 @@ class Arista(val origen: Vertice, val destino: Vertice, nodos: Array[Nodo] = Arr
     shape.line(ox, oy, destino.x, destino.y)
   }
 
-
-  def lastCoords():(Float,Float)={
-    if (!nodos.isEmpty)
-      return (nodos.last.x, nodos.last.y)
-    else
-      return (origen.x, origen.y)
-  }
-
+  /**
+   * listado de los segmentos de la arista
+   * @return lista de tuplas definiendo los segmentos que componen la arista
+   */
   def listaSegmentos():ArrayBuffer[((Float,Float),(Float,Float))]={
     var bl:ArrayBuffer[((Float,Float),(Float,Float))] = ArrayBuffer[((Float,Float),(Float,Float))]()
     var o:(Float,Float) = (origen.x, origen.y)
@@ -70,6 +90,11 @@ class Arista(val origen: Vertice, val destino: Vertice, nodos: Array[Nodo] = Arr
     return bl
   }
 
+  /**
+   * comprueba si una arista interseca con otra
+   * @param otra la otra arista
+   * @return hay interseccion?
+   */
   def intersectaConOtra(otra:Arista):Boolean={
     val otral = otra.listaSegmentos()
     val lis = listaSegmentos()

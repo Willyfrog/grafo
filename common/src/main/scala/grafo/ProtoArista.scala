@@ -5,18 +5,25 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.Gdx
 
 /**
- * Created with IntelliJ IDEA.
- * User: guillermo
- * Date: 29/05/12
- * Time: 11:29
+ * @author guillermo
+ * @since 29/05/12
  * Asistente para la creacion grafica de aristas
  */
 
+/**
+ * Constructor de arista
+ */
 class ProtoArista {
   var origen:Vertice = null
   var destino:Vertice = null
   var nodos:ArrayBuffer[Nodo] = ArrayBuffer[Nodo]()
 
+  /**
+   * Añade un nodo a la arista siempre y cuando este a cierta distancia
+   * @see Util.DISTANCE
+   * @param x posicion x del nodo
+   * @param y posicion y del nodo
+   */
   def addNodo(x:Float, y:Float){
     var add = true
     if( !nodos.isEmpty){
@@ -40,6 +47,12 @@ class ProtoArista {
     if (add) nodos.append(new Nodo(x,y))
   }
 
+  /**
+   * comprueba si dado un punto con el que generar un segmento este cortaria contra la misma arista
+   * @param x posicion x del punto
+   * @param y posicion y del punto
+   * @return interseca sobre si misma?
+   */
   def intersectaSegmentos(x:Float,y:Float):Boolean={
     var intersecta:Boolean = false
     if (!nodos.isEmpty){
@@ -53,6 +66,10 @@ class ProtoArista {
     return intersecta
   }
 
+  /**
+   * coordenadas del ultimo nodo/vertice añadido
+   * @return coordenadas
+   */
   def lastCoords():(Float,Float)={
     if (!nodos.isEmpty)
       return (nodos.last.x, nodos.last.y)
@@ -60,6 +77,10 @@ class ProtoArista {
       return (origen.x, origen.y)
   }
 
+  /**
+   * lista de segmentos de la arista
+   * @return
+   */
   def listaSegmentos():ArrayBuffer[((Float,Float),(Float,Float))]={
     var bl:ArrayBuffer[((Float,Float),(Float,Float))] = ArrayBuffer[((Float,Float),(Float,Float))]()
     if (!nodos.isEmpty){
@@ -75,11 +96,20 @@ class ProtoArista {
     return bl
   }
 
+  /**
+   * lista de las coordenadas de los nodos
+   * @return coordenadas de los nodos. Tiene longitud par
+   */
   def listaCoordenadasNodos(): List[Float] = {
     //Goes through nodes and append coordinates as a list
     return (for (n <- nodos) yield n.coordenadas()).toList.flatten
   }
 
+  /**
+   * Añade un vertice a la arista si cumple requisitos
+   * @param v vertice a añadir
+   * @return añadido?
+   */
   def addVertice(v:Vertice):Boolean={
     var res:Boolean = false
     if (origen==null)
@@ -97,6 +127,10 @@ class ProtoArista {
     return res
   }
 
+  /**
+   * Genera una arista a partir de la informacion del constructor
+   * @return una arista o nada si no hubiera suficiente informacion
+   */
   def toArista():Arista={
     Gdx.app.log("Lista Segmentos:", listaSegmentos().toString())
     val str = for (n <- nodos) yield n.coordenadas()
@@ -107,6 +141,10 @@ class ProtoArista {
       return new Arista(origen,destino, nodos.toArray)
   }
 
+  /**
+   * Dibuja la arista en un shaperenderer
+   * @param shape
+   */
   def drawIntoShapeRenderer(shape:ShapeRenderer){
     var ox = origen.x
     var oy = origen.y
@@ -119,7 +157,16 @@ class ProtoArista {
       shape.line(ox, oy, destino.x, destino.y)
   }
 
+  /**
+   * Comprueba si tiene toda la informacion necesaria para formar una arista
+   * @return tiene origen y destino?
+   */
   def estaCompleta:Boolean=(destino!=null&&origen!=null)
+
+  /**
+   * Comprueba si hay informacion en la arista
+   * @return tiene origen?
+   */
   def estaVacia:Boolean=(origen==null)
 
 }
