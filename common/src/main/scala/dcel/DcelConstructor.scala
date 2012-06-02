@@ -19,6 +19,7 @@ class DcelConstructor (val g:Grafo){
   def addVertex(v:Vertex){
     lvertices.append(v)
   }
+
   def addEdgeDoble(v1:Vertex, v2:Vertex){
     addEdge(v1,v2)
     addEdge(v2,v1)
