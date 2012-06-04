@@ -71,12 +71,12 @@ class MyGame extends ApplicationListener {
     //stage.addActor(next)
 
     next.setClickListener(new ClickListener {
-      def click(p1: Actor, p2: Float, p3: Float) {
+      override def click(p1: Actor, p2: Float, p3: Float) {
         Gdx.app.log("NEXT", "Me pulsaron!")
       }
     })
     salir.setClickListener(new ClickListener {
-      def click(p1: Actor, p2: Float, p3: Float) {
+      override def click(p1: Actor, p2: Float, p3: Float) {
         Gdx.app.exit()
       }
     })
@@ -89,7 +89,6 @@ class MyGame extends ApplicationListener {
 
     cam.update()
     cam.apply(Gdx.gl10) //TODO: buscar que hace esta linea!
-
 
 
     if (Gdx.input.isButtonPressed(Buttons.LEFT)){
