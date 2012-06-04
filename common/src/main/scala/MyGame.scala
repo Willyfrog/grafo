@@ -10,6 +10,13 @@ import glutils.ShapeRenderer
 import glutils.ShapeRenderer.ShapeType
 import grafo.{Nodo, ProtoArista, Vertice, Grafo}
 import dcel.DcelConstructor
+import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
+import math.min
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle
+import com.badlogic.gdx.scenes.scene2d.ui._
+import com.badlogic.gdx.scenes.scene2d.{Actor, Stage}
 
 class MyGame extends ApplicationListener {
 
@@ -20,6 +27,12 @@ class MyGame extends ApplicationListener {
   var dcg:DcelConstructor = null
   var constructor:ProtoArista = null
   var lastLabel:Int = 0
+  var container:Table = null
+  var run:Button = null
+  var skin:Skin = null
+  var window:Window = null
+  var stage:Stage = null
+
 
   def needsGL20():Boolean = false
 
@@ -41,6 +54,33 @@ class MyGame extends ApplicationListener {
     shape = new ShapeRenderer()
     shape.setProjectionMatrix(cam.combined)
     Gdx.app.log("Info", "Fin de lainicializacion de la aplicacion")
+
+    skin = new Skin(Gdx.files.internal("gdx_uiskin/uiskin.json"), Gdx.files.internal("gdx_uiskin/uiskin.png"))
+    stage = new Stage (Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false)
+    window = new Window("", skin.getStyle(classOf[WindowStyle]),"window")
+    window.x = 670f
+    window.y = 0f
+    window.defaults().spaceBottom(10)
+    window.row().fill().expandX()
+    val next:Button = new TextButton("Siguiente", skin.getStyle(classOf[TextButtonStyle]), "button-sl")
+    val salir:Button = new TextButton("Salir", skin.getStyle(classOf[TextButtonStyle]), "button-sl")
+    window.add(next).fill(0,0)
+    window.add(salir).fill(0,0)
+    window.pack()
+    stage.addActor(window)
+    //stage.addActor(next)
+
+    next.setClickListener(new ClickListener {
+      def click(p1: Actor, p2: Float, p3: Float) {
+        Gdx.app.log("NEXT", "Me pulsaron!")
+      }
+    })
+    salir.setClickListener(new ClickListener {
+      def click(p1: Actor, p2: Float, p3: Float) {
+        Gdx.app.exit()
+      }
+    })
+
   }
   override def render() {
     var v:Vertice = null
@@ -49,6 +89,8 @@ class MyGame extends ApplicationListener {
 
     cam.update()
     cam.apply(Gdx.gl10) //TODO: buscar que hace esta linea!
+
+
 
     if (Gdx.input.isButtonPressed(Buttons.LEFT)){
       unprojectedVertex.set(Gdx.input.getX(),Gdx.input.getY(), 0 )
@@ -103,6 +145,8 @@ class MyGame extends ApplicationListener {
       shape.end()
     }
 
+    stage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f))
+    stage.draw()
 
   }
   override def dispose() {

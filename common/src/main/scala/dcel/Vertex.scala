@@ -1,20 +1,17 @@
 package dcel
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import math.{sqrt, pow, abs}
+import math.{sqrt, pow}
 
 /**
- * Created with IntelliJ IDEA.
- * User: gvaya
- * Date: 28/05/12
- * Time: 23:29
- * To change this template use File | Settings | File Templates.
+ * @author gvaya
+ * @since 28/05/12
  */
 
 class Vertex (val label:String, var x:Int, var y:Int){
   var incidente:Edge = null
 
-  def getCoords():(Int,Int) = (x,y)
+  def coordenadas():(Int,Int) = (x,y)
 
   def setCoords(x1:Int, y1:Int){
     x = x1
