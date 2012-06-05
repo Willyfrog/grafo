@@ -13,6 +13,8 @@ import com.badlogic.gdx.Gdx
 object Util {
 
   val DISTANCE = 10
+  val WIDTH:Int = 800
+  val HEIGHT:Int = 600
 
   def mismoSigno(x:Float,y:Float):Boolean={
     ((x>=0 && y>=0) || (x<=0 && y<=0))

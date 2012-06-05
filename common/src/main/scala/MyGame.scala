@@ -1,24 +1,21 @@
 package org.gvaya.ssii
 
-import collection.mutable.ArrayBuffer
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.graphics.VertexAttributes.Usage
-import com.badlogic.gdx.{Gdx, ApplicationListener}
 import com.badlogic.gdx.graphics._
 import com.badlogic.gdx.Input.Buttons
 import glutils.ShapeRenderer
 import glutils.ShapeRenderer.ShapeType
-import grafo.{Nodo, ProtoArista, Vertice, Grafo}
 import dcel.DcelConstructor
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
 import math.min
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle
 import com.badlogic.gdx.scenes.scene2d.ui._
 import com.badlogic.gdx.scenes.scene2d.{Actor, Stage}
+import com.badlogic.gdx.{Game, Gdx}
+import grafo._
 
-class MyGame extends ApplicationListener {
+class MyGame extends Game {
 
   var cam:OrthographicCamera = null
   var unprojectedVertex:Vector3 = new Vector3()
@@ -49,7 +46,7 @@ class MyGame extends ApplicationListener {
   override def create() {
     Gdx.app.log("Info", "Inicializando aplicacion")
     cam = new OrthographicCamera(Gdx.graphics.getWidth, Gdx.graphics.getHeight)
-    cam.setToOrtho(false,480,320)
+    cam.setToOrtho(false,Util.WIDTH,Util.HEIGHT)
     g = new Grafo()
     shape = new ShapeRenderer()
     shape.setProjectionMatrix(cam.combined)
