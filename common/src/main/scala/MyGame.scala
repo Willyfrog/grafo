@@ -36,11 +36,11 @@ class MyGame extends Game {
   def genLabel():String={
     lastLabel+=1
     if (lastLabel<=26)
-      return 'a'.to('z')(lastLabel).toString
+      'a'.to('z')(lastLabel).toString
     else if (lastLabel<=52)
-      return 'A'.to('Z')(lastLabel-26).toString
+      'A'.to('Z')(lastLabel-26).toString
     else
-      return (lastLabel-52).toString
+      (lastLabel-52).toString
   }
 
   override def create() {
@@ -53,7 +53,7 @@ class MyGame extends Game {
     Gdx.app.log("Info", "Fin de lainicializacion de la aplicacion")
 
     skin = new Skin(Gdx.files.internal("gdx_uiskin/uiskin.json"), Gdx.files.internal("gdx_uiskin/uiskin.png"))
-    stage = new Stage (Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false)
+    stage = new Stage (Gdx.graphics.getWidth, Gdx.graphics.getHeight, false)
     window = new Window("", skin.getStyle(classOf[WindowStyle]),"window")
     window.x = 670f
     window.y = 0f
@@ -89,7 +89,7 @@ class MyGame extends Game {
 
 
     if (Gdx.input.isButtonPressed(Buttons.LEFT)){
-      unprojectedVertex.set(Gdx.input.getX(),Gdx.input.getY(), 0 )
+      unprojectedVertex.set(Gdx.input.getX,Gdx.input.getY, 0 )
       cam.unproject(unprojectedVertex)
 
       if (constructor==null) //solo puede comenzar una arista si pulsamos con el izdo.
@@ -109,7 +109,7 @@ class MyGame extends Game {
 
     if (Gdx.input.isButtonPressed(Buttons.RIGHT)){
       v = null //por si acaso acarreamos de antes
-      unprojectedVertex.set(Gdx.input.getX(),Gdx.input.getY(), 0 )
+      unprojectedVertex.set(Gdx.input.getX,Gdx.input.getY, 0 )
       cam.unproject(unprojectedVertex)
       v = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y) //toca vertice?
       if (v==null)
@@ -141,7 +141,7 @@ class MyGame extends Game {
       shape.end()
     }
 
-    stage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f))
+    stage.act(min(Gdx.graphics.getDeltaTime, 1 / 30f))
     stage.draw()
 
   }

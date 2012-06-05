@@ -25,7 +25,7 @@ class Arista(val origen: Vertice, val destino: Vertice, nodos: Array[Nodo] = Arr
    */
   def listaCoordenadasNodos(): List[Float] = {
     //Goes through nodes and append coordinates as a list
-    return (for (n <- nodos) yield n.coordenadas()).toList.flatten
+    (for (n <- nodos) yield n.coordenadas()).toList.flatten
   }
 
   /**
@@ -33,7 +33,7 @@ class Arista(val origen: Vertice, val destino: Vertice, nodos: Array[Nodo] = Arr
    * @return lista de longitud par desde el vertice origen al destino incluyendo nodos intermedios
    */
   def getVertexList: List[Float] = {
-    return origen.coordenadas ::: listaCoordenadasNodos() ::: destino.coordenadas
+    origen.coordenadas ::: listaCoordenadasNodos() ::: destino.coordenadas
   }
 
   /**
@@ -41,7 +41,7 @@ class Arista(val origen: Vertice, val destino: Vertice, nodos: Array[Nodo] = Arr
    * @deprecated
    * @return mesh de tipo linea
    */
-  def getMesh(): Mesh = {
+  def getMesh: Mesh = {
     val len = 2 + nodos.length
     if (mesh == null) {
       mesh = new Mesh(true, len, len, new VertexAttribute(Usage.Position, len, "a_position"))

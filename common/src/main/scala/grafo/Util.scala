@@ -3,11 +3,9 @@ package grafo
 import com.badlogic.gdx.Gdx
 
 /**
- * Created with IntelliJ IDEA.
  * User: guillermo
  * Date: 30/05/12
  * Time: 11:25
- * To change this template use File | Settings | File Templates.
  */
 
 object Util {
@@ -35,7 +33,7 @@ object Util {
     val sig1 = mismoSigno(area2(a1,a2,b1),area2(a1,a2,b2))
     val sig2 = mismoSigno(area2(b1,b2,a1),area2(b1,b2,a2))
     Gdx.app.log("Resultado: estan al mismo lado: ", (sig1, sig2).toString())
-    return  !(sig1 || sig2)
+    !(sig1 || sig2)
   }
 
 }
