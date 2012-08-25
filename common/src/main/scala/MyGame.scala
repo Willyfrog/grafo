@@ -6,12 +6,16 @@ import com.badlogic.gdx.Input.Buttons
 import glutils.ShapeRenderer
 import glutils.ShapeRenderer.ShapeType
 import dcel.DcelConstructor
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
 import math.min
 import com.badlogic.gdx.scenes.scene2d.ui._
-import com.badlogic.gdx.scenes.scene2d.{Actor, Stage}
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.{Actor, Stage, InputEvent}
 import com.badlogic.gdx.{Game, Gdx}
 import grafo._
 
@@ -51,29 +55,29 @@ class MyGame extends Game {
     shape = new ShapeRenderer()
     shape.setProjectionMatrix(cam.combined)
     Gdx.app.log("Info", "Fin de lainicializacion de la aplicacion")
-
-    skin = new Skin(Gdx.files.internal("gdx_uiskin/uiskin.json"), Gdx.files.internal("gdx_uiskin/uiskin.png"))
+    //skin = new Skin(Gdx.files.internal("gdx_uiskin/uiskin.json"), Gdx.files.internal("gdx_uiskin/uiskin.png"))
+    skin = new Skin(Gdx.files.internal("gdx_uiskin/uiskin.json"))
     stage = new Stage (Gdx.graphics.getWidth, Gdx.graphics.getHeight, false)
-    window = new Window("", skin.getStyle(classOf[WindowStyle]),"window")
-    window.x = 670f
-    window.y = 0f
+    window = new Window("", skin)
+    window.setX(670f)
+    window.setY(0f)
     window.defaults().spaceBottom(10)
     window.row().fill().expandX()
-    val next:Button = new TextButton("Siguiente", skin.getStyle(classOf[TextButtonStyle]), "button-sl")
-    val salir:Button = new TextButton("Salir", skin.getStyle(classOf[TextButtonStyle]), "button-sl")
+    val next:Button = new TextButton("Siguiente", skin)
+    val salir:Button = new TextButton("Salir", skin)
     window.add(next).fill(0,0)
     window.add(salir).fill(0,0)
     window.pack()
     stage.addActor(window)
     //stage.addActor(next)
 
-    next.setClickListener(new ClickListener {
-      override def click(p1: Actor, p2: Float, p3: Float) {
+    next.addListener(new ActorGestureListener {
+      override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button:Int) {
         Gdx.app.log("NEXT", "Me pulsaron!")
       }
     })
-    salir.setClickListener(new ClickListener {
-      override def click(p1: Actor, p2: Float, p3: Float) {
+    salir.addListener(new ActorGestureListener {
+      override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button:Int) {
         Gdx.app.exit()
       }
     })

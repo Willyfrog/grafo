@@ -8,8 +8,9 @@ import AssemblyKeys._
 object Settings {
   lazy val common = Defaults.defaultSettings ++ Seq (
     version := "0.1",
-    scalaVersion := "2.9.1",
-    updateLibgdxTask
+    scalaVersion := "2.10.0-M6",
+    updateLibgdxTask,
+    compileOrder := CompileOrder.JavaThenScala
    )
 
   lazy val desktop = Settings.common ++ Seq (
