@@ -6,7 +6,7 @@ import com.badlogic.gdx.Input.Buttons
 import glutils.ShapeRenderer
 import glutils.ShapeRenderer.ShapeType
 import dcel.DcelConstructor
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
+import com.badlogic.gdx.scenes.scene2d.utils.{DragListener, ActorGestureListener}
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
@@ -55,7 +55,6 @@ class MyGame extends Game {
     shape = new ShapeRenderer()
     shape.setProjectionMatrix(cam.combined)
     Gdx.app.log("Info", "Fin de lainicializacion de la aplicacion")
-    //skin = new Skin(Gdx.files.internal("gdx_uiskin/uiskin.json"), Gdx.files.internal("gdx_uiskin/uiskin.png"))
     skin = new Skin(Gdx.files.internal("gdx_uiskin/uiskin.json"))
     stage = new Stage (Gdx.graphics.getWidth, Gdx.graphics.getHeight, false)
     window = new Window("", skin)
@@ -67,20 +66,52 @@ class MyGame extends Game {
     val salir:Button = new TextButton("Salir", skin)
     window.add(next).fill(0,0)
     window.add(salir).fill(0,0)
-    window.pack()
-    stage.addActor(window)
-    //stage.addActor(next)
+
+
+
+    window.addListener(new ActorGestureListener{
+      override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button:Int){
+        event.cancel()
+        Gdx.app.log("Window", "Ventana pulsada")
+        //event.cancel()
+      }
+    })
 
     next.addListener(new ActorGestureListener {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button:Int) {
+        event.cancel()
         Gdx.app.log("NEXT", "Me pulsaron!")
       }
     })
     salir.addListener(new ActorGestureListener {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button:Int) {
+        event.cancel()
         Gdx.app.exit()
       }
     })
+
+    stage.addListener(new DragListener {
+      override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button:Int):Boolean ={
+        event.cancel()
+        Gdx.app.log("Stage", "Me pulsaron!")
+        super.touchDown(event, x, y, pointer, button)
+      }
+
+      override def touchDragged(event: InputEvent, x: Float, y: Float, pointer: Int) {
+        Gdx.app.log("Stage", "Me tiran!")
+        super.touchDragged(event, x, y, pointer)
+      }
+
+      override def touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
+        Gdx.app.log("Stage", "Me despulsaron!")
+        super.touchUp(event, x, y, pointer, button)
+      }
+    })
+
+    window.pack()
+    stage.addActor(window)
+
+    Gdx.input.setInputProcessor(stage)
 
   }
   override def render() {
@@ -92,7 +123,7 @@ class MyGame extends Game {
     cam.apply(Gdx.gl10) //TODO: buscar que hace esta linea!
 
 
-    if (Gdx.input.isButtonPressed(Buttons.LEFT)){
+    /*if (Gdx.input.isButtonPressed(Buttons.LEFT)){
       unprojectedVertex.set(Gdx.input.getX,Gdx.input.getY, 0 )
       cam.unproject(unprojectedVertex)
 
@@ -126,7 +157,7 @@ class MyGame extends Game {
       }
       else
           g.addVertice(v) //si no estamos construyendo una arista, se añade el nodo
-    }
+    } */
 
     if (constructor!=null && constructor.estaCompleta)
     {
@@ -145,7 +176,7 @@ class MyGame extends Game {
       shape.end()
     }
 
-    stage.act(min(Gdx.graphics.getDeltaTime, 1 / 30f))
+    stage.act(min(Gdx.graphics.getDeltaTime, 1 / 50f))
     stage.draw()
 
   }
