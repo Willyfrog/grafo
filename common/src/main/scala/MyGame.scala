@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.{DragListener, ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
+import com.badlogic.gdx.Input.Buttons
 import math.min
 import com.badlogic.gdx.scenes.scene2d.ui._
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
@@ -47,6 +48,16 @@ class MyGame extends Game {
       (lastLabel-52).toString
   }
 
+  def añadirSiCompleta()
+  {
+    if (constructor!=null && constructor.estaCompleta)
+    {
+      g.addArista(constructor.toArista())
+      //constructor.finalize()
+      constructor = null
+    }
+  }
+
   override def create() {
     Gdx.app.log("Info", "Inicializando aplicacion")
     cam = new OrthographicCamera(Gdx.graphics.getWidth, Gdx.graphics.getHeight)
@@ -73,7 +84,7 @@ class MyGame extends Game {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button:Int){
         event.cancel()
         Gdx.app.log("Window", "Ventana pulsada")
-        //event.cancel()
+
       }
     })
 
@@ -91,23 +102,79 @@ class MyGame extends Game {
     })
 
     stage.addListener(new DragListener {
+
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button:Int):Boolean ={
+        unprojectedVertex.set(x,y, 0 )
+        //cam.unproject(unprojectedVertex)
         event.cancel()
-        Gdx.app.log("Stage", "Me pulsaron!")
+        //Gdx.app.log("Stage", "Me pulsaron!")
+        var v:Vertice = null
+
+        if (button == Buttons.LEFT)
+        {
+          if (constructor==null) //solo puede comenzar una arista si pulsamos con el izdo.
+            constructor= new ProtoArista
+
+          v = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y)
+          if (v!=null){ //habia vertice donde pulsamos? lo añadimos
+            constructor.addVertice(v)
+            añadirSiCompleta()
+          }
+          else if (constructor.estaVacia){ // si no habia vertice y no se ha comenzado una arista, creamos el nodo
+            constructor.addVertice(new Vertice(unprojectedVertex.x, unprojectedVertex.y, genLabel()))
+          }
+          else{ //e.o.c. añadimos un nodo mas
+            constructor.addNodo(unprojectedVertex.x, unprojectedVertex.y)
+          }
+        }
+        else //sera el derecho, entonces
+        {
+          v = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y) //toca vertice?
+          if (v==null)
+            v = new Vertice(unprojectedVertex.x, unprojectedVertex.y, genLabel())
+
+          if (constructor!=null)
+          {
+            if (constructor.addVertice(v))
+              g.addVertice(v)
+              añadirSiCompleta()
+          }
+          else
+            g.addVertice(v) //si no estamos construyendo una arista, se añade el nodo
+        }
+        //mantenemos la funcionalidad, por si acaso
         super.touchDown(event, x, y, pointer, button)
       }
 
       override def touchDragged(event: InputEvent, x: Float, y: Float, pointer: Int) {
-        Gdx.app.log("Stage", "Me tiran!")
+        //Gdx.app.log("Stage", "Me tiran!")
+        var v:Vertice = null
+        unprojectedVertex.set(x,y, 0 )
+        //cam.unproject(unprojectedVertex)
+        if (pointer == Buttons.LEFT && constructor!=null) //no puede iniciar una arista, primero se crea con touchDown
+        {
+          v = g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y)
+          if (v!=null){ //habia vertice donde pulsamos? lo añadimos
+            constructor.addVertice(v)
+            añadirSiCompleta()
+          }
+          else{ //e.o.c. añadimos un nodo mas
+            constructor.addNodo(unprojectedVertex.x, unprojectedVertex.y)
+          }
+        }
         super.touchDragged(event, x, y, pointer)
       }
 
       override def touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
-        Gdx.app.log("Stage", "Me despulsaron!")
+        //Gdx.app.log("Stage", "Me despulsaron!")
+
+        unprojectedVertex.set(x,y, 0 )
+        //cam.unproject(unprojectedVertex)
         super.touchUp(event, x, y, pointer, button)
       }
     })
 
+    // TODO: añadir un boton para finalizar y la opcion de pulsar escape para finalizar tambien
     window.pack()
     stage.addActor(window)
 
@@ -115,7 +182,7 @@ class MyGame extends Game {
 
   }
   override def render() {
-    var v:Vertice = null
+
     Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f)
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
 
