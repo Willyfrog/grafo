@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui._
 import com.badlogic.gdx.scenes.scene2d.utils.{DragListener, ActorGestureListener}
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
+import math.min
 
 /**
  * User: guillermo
@@ -18,7 +19,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
  * Time: 9:29
  */
 
-abstract class BaseScreen extends Screen{
+class BaseScreen extends Screen{
   //var stage = new Stage(Util.WIDTH, Util.HEIGHT, false)
 
   var cam:OrthographicCamera = null
@@ -56,7 +57,7 @@ abstract class BaseScreen extends Screen{
   }
 
   override def show(){
-    super.show()
+
     Gdx.app.log("Info", "Inicializando aplicacion")
     cam = new OrthographicCamera(Gdx.graphics.getWidth, Gdx.graphics.getHeight)
     cam.setToOrtho(false,Util.WIDTH,Util.HEIGHT)
@@ -177,10 +178,9 @@ abstract class BaseScreen extends Screen{
     stage.addActor(window)
 
     Gdx.input.setInputProcessor(stage)
-
+    // super.show()
   }
   override def render(delta:Float){
-    super.render(delta:Float)
 
     Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f)
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
@@ -205,12 +205,29 @@ abstract class BaseScreen extends Screen{
       shape.end()
     }
 
-    stage.act(min(Gdx.graphics.getDeltaTime, 1 / 50f))
+    stage.act(min(delta, 1 / 50f))
     stage.draw()
+
+    //super.render(delta:Float)
   }
   override def dispose(){
-    super.dispose()
     shape.dispose()
+    //super.dispose()
+  }
+
+  override def resize(p1: Int, p2: Int) {
+
+  }
+
+  def hide() {
+
+  }
+
+  def pause() {
+
+  }
+
+  def resume() {
 
   }
 }

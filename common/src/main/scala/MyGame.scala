@@ -26,10 +26,10 @@ class MyGame extends Game {
   def needsGL20():Boolean = false
 
   override def create() {
-    setScreen(new BaseScreen(this))
+    setScreen(new BaseScreen())
   }
   override def render() {
-
+    super.render()
 
   }
   override def dispose() {
