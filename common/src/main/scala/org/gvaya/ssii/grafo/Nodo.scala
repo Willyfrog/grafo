@@ -1,4 +1,4 @@
-package grafo
+package org.gvaya.ssii.grafo
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -36,5 +36,5 @@ class Nodo(val x: Float, val y: Float) {
    * @param y1 coordenada y del punto
    * @return distancia al punto. Siempre positiva
    */
-  def distance(x1:Float,y1:Float): Double = sqrt(pow(x1-x,2)+pow(y1-y,2))
+  def distance(x1: Float, y1: Float): Double = sqrt(pow(x1 - x, 2) + pow(y1 - y, 2))
 }

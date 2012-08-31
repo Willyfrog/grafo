@@ -19,7 +19,11 @@
   </component>
   <component name="SbtSettings">
     <option name="sbtLauncherJarPath" value="$USER_HOME$/bin/sbt-launch.jar" />
+<<<<<<< HEAD
     <option name="sbtLauncherVmParameters" value="-Xmx712M -XX:MaxPermSize=256M" />
+=======
+    <option name="sbtLauncherVmParameters" value="-Xmx750M -XX:MaxPermSize=256M" />
+>>>>>>> refactor_screen
     <option name="useApplicationSettings" value="false" />
   </component>
 </project>

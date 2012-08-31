@@ -1,7 +1,7 @@
-package grafo
+package org.gvaya.ssii.grafo
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import math.{sqrt,pow}
+import math.{sqrt, pow}
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,8 +23,8 @@ class Vertice(x: Float, y: Float, val etiqueta: String) extends Nodo(x, y) {
    * dibuja el vértice en el shaperenderer
    * @param shape Shaperenderer en el que dibujar
    */
-  def drawIntoShapeRenderer(shape:ShapeRenderer){
-    shape.circle(x,y, 3.0f)
+  def drawIntoShapeRenderer(shape: ShapeRenderer) {
+    shape.circle(x, y, 3.0f)
   }
 
 

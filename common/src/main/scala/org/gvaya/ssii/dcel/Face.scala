@@ -1,4 +1,4 @@
-package dcel
+package org.gvaya.ssii.dcel
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,6 +8,6 @@ package dcel
  * To change this template use File | Settings | File Templates.
  */
 
-class Face (val label:String){
+class Face(val label: String) {
 
 }

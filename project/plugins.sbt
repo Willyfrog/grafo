@@ -1,11 +1,9 @@
 resolvers += Resolver.url("scalasbt releases", url("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns)
 
-
 resolvers += Resolver.url("scalasbt snapshots", new
         URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-snapshots"))(Resolver.ivyStylePatterns)
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.8.4")
-
 
 addSbtPlugin("org.scala-sbt" % "sbt-android-plugin" % "0.6.2")
 

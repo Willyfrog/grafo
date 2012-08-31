@@ -1,4 +1,4 @@
-package grafo
+package org.gvaya.ssii.grafo
 
 import collection.mutable.ArrayBuffer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -15,17 +15,17 @@ import com.badlogic.gdx.Gdx
  * clase contenedora de la estructura del grafo
  */
 class Grafo {
-  val vertices:ArrayBuffer[Vertice] = new ArrayBuffer[Vertice]()
-  val aristas:ArrayBuffer[Arista] = new ArrayBuffer[Arista]()
+  val vertices: ArrayBuffer[Vertice] = new ArrayBuffer[Vertice]()
+  val aristas: ArrayBuffer[Arista] = new ArrayBuffer[Arista]()
 
   /**
    * Añade una arista si no interseca con ninguna otra
    * @param a arista a añadir
    * @return Añadida?
    */
-  def addArista(a:Arista):Boolean={
-    var add:Boolean = true
-    for (aris<-aristas){
+  def addArista(a: Arista): Boolean = {
+    var add: Boolean = true
+    for (aris <- aristas) {
       add &= !aris.intersectaConOtra(a)
       if (!add)
         return add
@@ -43,7 +43,7 @@ class Grafo {
    * Añadir vertice al grafo
    * @param v vertice
    */
-  def addVertice(v:Vertice){
+  def addVertice(v: Vertice) {
     vertices.append(v)
   }
 
@@ -51,14 +51,14 @@ class Grafo {
    * Dibuja el grafo en el shaperenderer
    * @param shape shaperenderer
    */
-  def drawIntoShapeRenderer(shape:ShapeRenderer){
+  def drawIntoShapeRenderer(shape: ShapeRenderer) {
     shape.begin(ShapeType.Line)
-    shape.setColor(0f,1f,0.9f,1f)
-    for (a<-aristas) a.drawIntoShapeRenderer(shape)
+    shape.setColor(0f, 1f, 0.9f, 1f)
+    for (a <- aristas) a.drawIntoShapeRenderer(shape)
     shape.end()
     shape.begin(ShapeType.Circle)
-    shape.setColor(1f,0f,0.9f,1f)
-    for (v<-vertices) v.drawIntoShapeRenderer(shape)
+    shape.setColor(1f, 0f, 0.9f, 1f)
+    for (v <- vertices) v.drawIntoShapeRenderer(shape)
     shape.end()
   }
 
@@ -69,9 +69,9 @@ class Grafo {
    * @param y1 coordenadas y del punto
    * @return está seleccionado un punto?
    */
-  def tocandoVertice(x1:Float, y1:Float):Vertice={
-    for (v<-vertices){
-      if (v.distance(x1,y1) <= Util.DISTANCE){
+  def tocandoVertice(x1: Float, y1: Float): Vertice = {
+    for (v <- vertices) {
+      if (v.distance(x1, y1) <= Util.DISTANCE) {
         //Gdx.app.log("DEBUG", "Tocando a " + v.etiqueta)
         return v
       }

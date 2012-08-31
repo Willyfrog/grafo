@@ -8,11 +8,44 @@
         <option name="fsc" value="true" />
       </configuration>
     </facet>
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/gen" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/gen" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/res" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/assets" />
+        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/libs" />
+        <option name="REGENERATE_R_JAVA" value="true" />
+        <option name="REGENERATE_JAVA_BY_AIDL" value="true" />
+        <option name="USE_CUSTOM_APK_RESOURCE_FOLDER" value="false" />
+        <option name="CUSTOM_APK_RESOURCE_FOLDER" value="" />
+        <option name="USE_CUSTOM_COMPILER_MANIFEST" value="false" />
+        <option name="CUSTOM_COMPILER_MANIFEST" value="" />
+        <option name="APK_PATH" value="" />
+        <option name="LIBRARY_PROJECT" value="false" />
+        <option name="RUN_PROCESS_RESOURCES_MAVEN_TASK" value="true" />
+        <option name="GENERATE_UNSIGNED_APK" value="false" />
+        <option name="CUSTOM_DEBUG_KEYSTORE_PATH" value="" />
+        <option name="PACK_TEST_CODE" value="false" />
+        <option name="RUN_PROGUARD" value="false" />
+        <option name="PROGUARD_CFG_PATH" value="/proguard-project.txt" />
+        <resOverlayFolders>
+          <path>/res-overlay</path>
+        </resOverlayFolders>
+        <includeSystemProguardFile>true</includeSystemProguardFile>
+        <additionalNativeLibs />
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/../android/target/scala-2.9.1/classes" />
     <output-test url="file://$MODULE_DIR$/../android/target/scala-2.9.1/test-classes" />
     <exclude-output />
+    <content url="file://$MODULE_DIR$/gen">
+      <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/gen/gen" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/../android">
       <sourceFolder url="file://$MODULE_DIR$/../android/src/main/scala" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../android/src/main/java" isTestSource="false" />
@@ -22,10 +55,11 @@
       <sourceFolder url="file://$MODULE_DIR$/../android/src/test/scala" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../android/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../android/src/test/resources" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../android/gen" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/../android/target/scala-2.9.1/cache" />
       <excludeFolder url="file://$MODULE_DIR$/../android/target/streams" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.7" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.scala-lang_scala-library_2.9.1" level="project" />
     <orderEntry type="library" name="gdx-backend-android.jar" level="project" />
