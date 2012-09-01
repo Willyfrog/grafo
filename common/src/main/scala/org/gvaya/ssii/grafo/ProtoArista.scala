@@ -134,7 +134,7 @@ class ProtoArista {
     if (!estaCompleta)
       return null
     else
-      return new Arista(origen, destino, nodos.toArray)
+      return new Arista(origen, destino, nodos.toArray, Util.genLabel())
   }
 
   /**

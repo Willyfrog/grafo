@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui._
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.math.Vector3
 import org.gvaya.ssii.MyGame
-import org.gvaya.ssii.dcel.DcelConstructor
+import org.gvaya.ssii.dcel._
 
 /**
  * Created with IntelliJ IDEA.
@@ -68,7 +68,19 @@ class DCelScreen(val game: MyGame) extends Screen {
     window.add(next).fill(0, 0)
     window.add(salir).fill(0, 0)
     dcel = new DcelConstructor(game.g)
-    dcel.generar()
+    try
+      dcel.generar()
+    catch{
+      case e:DcelConstructorException => {
+        Gdx.app.log("DCEL", "Error al generar dcel")
+        Gdx.app.log("DUMP", "Vertices: " + dcel.lvertices.foldLeft("")((str:String, v:Vertex)=> str + ", " + v.label))
+        Gdx.app.log("DUMP", "Aristas: " + dcel.laristas.foldLeft("")((str:String, e:Edge)=> str + ", " + e.label))
+        Gdx.app.log("DUMP", "Caras: " + dcel.lcaras.foldLeft("")((str:String, f:Face)=> str + ", " + f.label))
+        //Gdx.app.exit()
+      }
+
+    }
+
   }
 
   def hide() {}

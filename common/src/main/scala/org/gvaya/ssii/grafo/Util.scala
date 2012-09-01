@@ -13,6 +13,7 @@ object Util {
   val DISTANCE = 10
   val WIDTH: Int = 800
   val HEIGHT: Int = 600
+  var lastLabel: Int = -1
 
   def mismoSigno(x: Float, y: Float): Boolean = {
     ((x >= 0 && y >= 0) || (x <= 0 && y <= 0))
@@ -26,6 +27,16 @@ object Util {
     e.o.c. esta a la izda
    */
     (b._1 - a._1) * (c._2 - a._2) - (c._1 - a._1) * (b._2 - a._2)
+  }
+
+  def genLabel(): String = {
+    lastLabel += 1
+    if (lastLabel <= 26)
+      'a'.to('z')(lastLabel).toString
+    else if (lastLabel <= 52)
+      'A'.to('Z')(lastLabel - 26).toString
+    else
+      (lastLabel - 52).toString
   }
 
   def interseccion(a1: (Float, Float), a2: (Float, Float), b1: (Float, Float), b2: (Float, Float)): Boolean = {

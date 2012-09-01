@@ -16,7 +16,7 @@ import collection.mutable.ArrayBuffer
  * @param destino Vertice de destino
  * @param nodos Listado de nodos intermedios si no es una linea recta entre origen y destino
  */
-class Arista(val origen: Vertice, val destino: Vertice, val nodos: Array[Nodo] = Array[Nodo]()) {
+class Arista(val origen: Vertice, val destino: Vertice, val nodos: Array[Nodo] = Array[Nodo](), val eti:String) {
   var mesh: Mesh = null
 
   /**
@@ -55,7 +55,7 @@ class Arista(val origen: Vertice, val destino: Vertice, val nodos: Array[Nodo] =
    * etiqueta de la arista
    * @return devuelve la etiqueta de la arista en forma origen_destino
    */
-  def etiqueta(): String = origen.etiqueta + "_" + destino.etiqueta
+  def etiqueta(): String = eti + "." + origen.etiqueta + "_" + destino.etiqueta
 
   /**
    * Dado un shaperenderer, dibuja dentro la arista

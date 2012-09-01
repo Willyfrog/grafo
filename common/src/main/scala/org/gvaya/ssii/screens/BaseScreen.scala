@@ -2,7 +2,7 @@ package org.gvaya.ssii.screens
 
 import com.badlogic.gdx.{Gdx, Screen}
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, Stage}
-import org.gvaya.ssii.grafo.{Vertice, Util, ProtoArista, Grafo}
+import org.gvaya.ssii.grafo._
 import com.badlogic.gdx.graphics.{GL10, OrthographicCamera}
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -26,23 +26,12 @@ class BaseScreen(var game: MyGame) extends Screen {
   var shape: ShapeRenderer = null
   var dcg: DcelConstructor = null
   var constructor: ProtoArista = null
-  var lastLabel: Int = 0
   var container: Table = null
   var run: Button = null
   var skin: Skin = null
   var window: Window = null
   var stage: Stage = null
 
-
-  def genLabel(): String = {
-    lastLabel += 1
-    if (lastLabel <= 26)
-      'a'.to('z')(lastLabel).toString
-    else if (lastLabel <= 52)
-      'A'.to('Z')(lastLabel - 26).toString
-    else
-      (lastLabel - 52).toString
-  }
 
   def añadirSiCompleta() {
     if (constructor != null && constructor.estaCompleta) {
@@ -84,6 +73,8 @@ class BaseScreen(var game: MyGame) extends Screen {
     next.addListener(new ActorGestureListener {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
         event.cancel()
+        Gdx.app.log("NEXT", "Vertices: " + game.g.vertices.foldLeft("")((str:String, v:Vertice)=> str + ", " + v.etiqueta))
+        Gdx.app.log("NEXT", "Aristas: " + game.g.aristas.foldLeft("")((str:String, v:Arista)=> str + ", " + v.etiqueta))
         game.setScreen(new DCelScreen(game))
       }
     })
@@ -115,7 +106,7 @@ class BaseScreen(var game: MyGame) extends Screen {
           }
           else if (constructor.estaVacia) {
             // si no habia vertice y no se ha comenzado una arista, creamos el nodo
-            constructor.addVertice(new Vertice(unprojectedVertex.x, unprojectedVertex.y, genLabel()))
+            constructor.addVertice(new Vertice(unprojectedVertex.x, unprojectedVertex.y, Util.genLabel()))
           }
           else {
             //e.o.c. añadimos un nodo mas
@@ -126,7 +117,7 @@ class BaseScreen(var game: MyGame) extends Screen {
         {
           v = game.g.tocandoVertice(unprojectedVertex.x, unprojectedVertex.y) //toca vertice?
           if (v == null)
-            v = new Vertice(unprojectedVertex.x, unprojectedVertex.y, genLabel())
+            v = new Vertice(unprojectedVertex.x, unprojectedVertex.y, Util.genLabel())
 
           if (constructor != null) {
             if (constructor.addVertice(v))

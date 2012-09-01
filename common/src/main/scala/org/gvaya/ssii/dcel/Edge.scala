@@ -22,7 +22,7 @@ class Edge(val label: String, val origin: Vertex, val destiny: Vertex, val nodos
   //var angle:Double = 0
 
   def igual(other: Edge): Boolean = {
-    (origin == other.origin && destiny == other.destiny)
+    (origin.label == other.origin.label && destiny.label == other.destiny.label)
   }
 
   def exitAngle(): Double = {
@@ -33,9 +33,14 @@ class Edge(val label: String, val origin: Vertex, val destiny: Vertex, val nodos
     atan2(origin.y - destiny.y, origin.x - destiny.x)
   }
 
-  def parteDe(v: Vertex): Boolean = origin.x == v.x && origin.y == v.y
+  def parteDe(v: Vertex): Boolean = origin.label == v.label
+  def origen:String = origin.label
 
-  def llegaA(v: Vertex): Boolean = destiny.x == v.x && destiny.y == v.y
+  def llegaA(v: Vertex): Boolean = destiny.label == v.label
+  def destino:String = destiny.label
+
+  def tieneSiguiente: Boolean = ccwd == null
+  def tieneAnterior: Boolean = ccwo == null
 
   def drawIntoShapeRenderer(shape: ShapeRenderer) {
     var ox = origin.x

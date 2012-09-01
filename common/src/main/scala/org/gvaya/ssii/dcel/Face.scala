@@ -8,6 +8,6 @@ package org.gvaya.ssii.dcel
  * To change this template use File | Settings | File Templates.
  */
 
-class Face(val label: String) {
+class Face(val label: String, val arista: Edge) {
 
 }
