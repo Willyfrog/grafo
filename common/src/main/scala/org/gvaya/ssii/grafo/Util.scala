@@ -31,9 +31,9 @@ object Util {
 
   def genLabel(): String = {
     lastLabel += 1
-    if (lastLabel <= 26)
+    if (lastLabel <= 25)
       'a'.to('z')(lastLabel).toString
-    else if (lastLabel <= 52)
+    else if (lastLabel <= 51)
       'A'.to('Z')(lastLabel - 26).toString
     else
       (lastLabel - 52).toString
@@ -47,4 +47,10 @@ object Util {
     !(sig1 || sig2)
   }
 
+  def modulo2pi(angle:Double):Double={
+    if (angle<0)
+      modulo2pi(angle + 2*math.Pi)
+    else
+      angle%(2*math.Pi)
+  }
 }

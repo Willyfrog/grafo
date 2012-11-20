@@ -30,6 +30,9 @@ class Nodo(val x: Float, val y: Float) {
     return List(x, y, z)
   }
 
+
+  override def toString = "(%.2f;%.2f)".format(x,y)
+
   /**
    * Distancia del nodo a un punto dado
    * @param x1 coordenada x del punto

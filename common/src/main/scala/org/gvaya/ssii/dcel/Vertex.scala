@@ -10,6 +10,9 @@ import math.{sqrt, pow}
 
 class Vertex(val label: String, var x: Float, var y: Float) {
   var incidente: Edge = null
+  var procesado = false
+  var order_label = -1
+  var order = 0
 
   def coordenadas(): (Float, Float) = (x, y)
 
@@ -28,4 +31,5 @@ class Vertex(val label: String, var x: Float, var y: Float) {
     sqrt(pow(x1 - x, 2) + pow(y1 - y, 2))
   }
 
+  override def toString = "(%s:%.2f;%.2f)".format(label,x,y)
 }

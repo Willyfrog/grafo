@@ -129,7 +129,7 @@ class ProtoArista {
    */
   def toArista(): Arista = {
     //Gdx.app.log("Lista Segmentos:", listaSegmentos().toString())
-    val str = for (n <- nodos) yield n.coordenadas()
+    //val str = for (n <- nodos) yield n.coordenadas()
     //Gdx.app.log("Lista Nodos", str.toString())
     if (!estaCompleta)
       return null

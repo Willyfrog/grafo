@@ -1,14 +1,17 @@
 package org.gvaya.ssii.screens
 
 import com.badlogic.gdx.{Gdx, Screen}
-import org.gvaya.ssii.grafo.{Util, ProtoArista, Grafo}
+import org.gvaya.ssii.grafo._
 import com.badlogic.gdx.graphics.{GL10, OrthographicCamera}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.ui._
-import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.{InputEvent, Stage}
 import com.badlogic.gdx.math.Vector3
 import org.gvaya.ssii.MyGame
 import org.gvaya.ssii.dcel._
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
+import math.min
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +27,7 @@ class DCelScreen(val game: MyGame) extends Screen {
   var unprojectedVertex: Vector3 = new Vector3()
   var shape: ShapeRenderer = null
 
-  var dcg: DcelConstructor = null
+
   var constructor: ProtoArista = null
   var lastLabel: Int = 0
   var container: Table = null
@@ -33,18 +36,23 @@ class DCelScreen(val game: MyGame) extends Screen {
   var window: Window = null
   var stage: Stage = null
   var dcel: DcelConstructor = null
+  var triangular: DcelConstructor = null
+  var loading: Boolean = true
 
   /**
    *
-   * @param p1
+   * @param delta
    */
-  def render(p1: Float) {
+  def render(delta: Float) {
     Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f)
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
 
     cam.update()
     cam.apply(Gdx.gl10) //TODO: buscar que hace esta linea!
     dcel.drawIntoShapeRenderer(shape)
+
+    stage.act(min(delta, 1 / 50f))
+    stage.draw()
   }
 
   def resize(p1: Int, p2: Int) {}
@@ -59,17 +67,62 @@ class DCelScreen(val game: MyGame) extends Screen {
     skin = new Skin(Gdx.files.internal("gdx_uiskin/uiskin.json"))
     stage = new Stage(Gdx.graphics.getWidth, Gdx.graphics.getHeight, false)
     window = new Window("", skin)
-    window.setX(670f)
+    window.setX(630f)
     window.setY(0f)
     window.defaults().spaceBottom(10)
     window.row().fill().expandX()
     val next: Button = new TextButton("Siguiente", skin)
     val salir: Button = new TextButton("Salir", skin)
+    val reset: Button = new TextButton("Reiniciar", skin)
     window.add(next).fill(0, 0)
     window.add(salir).fill(0, 0)
+    window.add(reset).fill(0, 0)
+
+    window.addListener(new ActorGestureListener {
+      override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
+        event.cancel()
+      }
+    })
+
+    salir.addListener(new ActorGestureListener {
+      override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
+        event.cancel()
+        Gdx.app.exit()
+      }
+    })
+
+    next.addListener(new ActorGestureListener {
+      override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
+        event.cancel()
+        if (!loading){
+          if (!dcel.todasTriangulares)
+          {
+            dcel.addTriangulo
+          }
+          else
+            Gdx.app.log("Next", "ya son todas triangulares")
+        }
+      }
+    })
+
+    reset.addListener(new ActorGestureListener {
+      override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
+        event.cancel()
+        dcel = null
+        game.setScreen(new BaseScreen(game))
+      }
+    })
+
+    window.pack()
+    stage.addActor(window)
+    Gdx.input.setInputProcessor(stage)
+
     dcel = new DcelConstructor(game.g)
     try
+    {
       dcel.generar()
+      loading = false //hemos terminado de cargar, podemos usar los botones
+    }
     catch{
       case e:DcelConstructorException => {
         Gdx.app.log("DCEL", "Error al generar dcel")

@@ -29,22 +29,26 @@ class DcelConstructor(val g: Grafo) {
     lvertices.append(v)
   }
 
-  def addArista(arista: Arista) {
+  def addArista(arista:Arista){
+    addArista(arista, false)
+  }
+
+  def addArista(arista: Arista, trianguladora: Boolean) {
     val v1: Vertex = findVertexByCoords(arista.origen.x, arista.origen.y).get
     val v2: Vertex = findVertexByCoords(arista.destino.x, arista.destino.y).get
     val nodos = arista.nodos
-    val e1: Edge = addEdge(v1, v2, nodos, arista.eti)
-    val e2: Edge = addEdge(v2, v1, nodos.reverse, arista.eti)
+    val e1: Edge = addEdge(v1, v2, nodos, arista.eti, trianguladora)
+    val e2: Edge = addEdge(v2, v1, nodos.reverse, arista.eti, trianguladora)
     e1.inversa = e2
     e2.inversa = e1
   }
 
-  def addEdge(v1: Vertex, v2: Vertex, nodos: Array[Nodo], eti:String): Edge = {
+  def addEdge(v1: Vertex, v2: Vertex, nodos: Array[Nodo], eti:String, trianguladora:Boolean): Edge = {
     if (!lvertices.contains(v1))
       addVertex(v1)
     if (!lvertices.contains(v2))
       addVertex(v2)
-    val e: Edge = new Edge(eti + "." + v1.label + "_" + v2.label, v1, v2, nodos)
+    val e: Edge = new Edge(eti + "." + v1.label + "_" + v2.label, v1, v2, nodos, trianguladora)
     laristas.append(e)
     e
   }
@@ -67,11 +71,10 @@ class DcelConstructor(val g: Grafo) {
   def siguienteEdge(arista:Edge):Edge={
     val l = findEdgesFromVertex(arista.destiny).filter(_.label!=arista.inversa.label) //aristas que salen del destino, menos la inversa
     val l2 = findEdgesFromVertex(arista.destiny)
-    Gdx.app.log("SiguienteEdge", "siguientes aristas posibles: " + l.foldLeft("")((x:String, y:Edge)=> x + ", " + y.label))
-    Gdx.app.log("SiguienteEdge", "siguientes aristas posibles2: " + l2.foldLeft("")((x:String, y:Edge)=> x + ", " + y.label))
+    //Gdx.app.log("SiguienteEdge", "   siguientes aristas posibles: " + l.foldLeft("")((x:String, y:Edge)=> x + ", " + y.label))
     val ang = arista.entryAngle()
     if (!l.isEmpty)
-      l.minBy (e => (e.exitAngle() - ang) % (2 * math.Pi))
+      l.maxBy (e => Util.modulo2pi(e.exitAngle() - ang) )
     else
       arista.inversa //no hay otra, asi que volvemos por donde vinimos (o casi)
   }
@@ -85,6 +88,44 @@ class DcelConstructor(val g: Grafo) {
       null
   }
 
+  /**
+   * Convierte una cara a triangular
+   */
+  def addTriangulo
+  {
+    val ind = lcaras.indexWhere(_.esTriangular==false) //localiza una cara no triangular
+    var caraO = lcaras(ind)
+
+    var siguiente = caraO.arista.ccwd
+    //generamos las aristas que cortaran la cara para formar un triangulo
+    var eti = Util.genLabel()
+    var nod:Array[Nodo] = Array[Nodo]()
+    var t1 = addEdge(caraO.arista.origin,siguiente.destiny, nod, eti,true)
+    var t2 = addEdge(siguiente.destiny, caraO.arista.origin, nod, eti,true)
+    t1.inversa = t2
+    t2.inversa = t1
+    //enlazamos t1
+    t1.ccwd = siguiente.ccwd
+    siguiente.ccwd.ccwo = t1
+    t1.ccwo = caraO.arista.ccwo
+    caraO.arista.ccwo.ccwd = t1
+    //generamos la nueva cara
+    val f = new Face(Util.genLabel(),t1)
+    //enlazamos t2
+    t2.ccwd = caraO.arista
+    caraO.arista.ccwo=t2
+    t2.ccwo = siguiente
+    siguiente.ccwd = t2
+
+    //guardamos aristas y cara
+    laristas.append(t1,t2)
+    lcaras.append(f)
+  }
+
+  def todasTriangulares:Boolean={
+    lcaras.indexWhere(_.esTriangular==false)<0 //no encuentra la posicion de una cara no triangular
+  }
+
   def generar() {
 
     for (v <- g.vertices)
@@ -93,7 +134,8 @@ class DcelConstructor(val g: Grafo) {
       addArista(a)
     Gdx.app.log("Generar", "Lista de aristas")
     for (a:Edge <- laristas){
-      Gdx.app.log("Generar", "arista: %s, origen %s, destino %s".format(a.label, a.origin.label, a.destiny.label))
+      var nods = "[%s|%s|%s]".format(a.origin.toString,a.nodos.foldLeft("")((a,n)=>a+n.toString),a.destiny.toString)
+      Gdx.app.log("Generar", "Lbl:%s, ori:%s, dest:%s, sal:%.3f, ent:%.3f, %s".format(a.label, a.origin.label, a.destiny.label, a.exitAngle()*180/math.Pi, a.entryAngle()*180/math.Pi, nods))
     }
 
     //generamos caras y enlazamos aristas
@@ -106,7 +148,7 @@ class DcelConstructor(val g: Grafo) {
       val f = new Face(Util.genLabel(), e0)
       lcaras.append(f)
       e2 = siguienteEdge(e1)
-      while (e2.label != e0.label)
+      while (e1.destino != e0.origen) //se ha cerrado el ciclo?
       {
         Gdx.app.log("DCEL", "  Procesamos a " + e2.label)
         if (e2.ccwo!=null) //asegurarnos de que no hace cosas mal (como entrar en un bucle infinito)
@@ -136,10 +178,14 @@ class DcelConstructor(val g: Grafo) {
 
   def drawIntoShapeRenderer(shape: ShapeRenderer) {
     shape.begin(ShapeType.Line)
-    shape.setColor(0.5f, 0.5f, 0.9f, 1f)
-    laristas.foreach(_.drawIntoShapeRenderer(shape))
+    shape.setColor(0.6f, 0.6f, 0.6f, 1f)//Dibujar aristas de triangulacion
+    laristas.filter(_.triangulacion).toList.foreach(_.drawIntoShapeRenderer(shape))
     shape.end()
-    shape.begin(ShapeType.Circle)
+    shape.begin(ShapeType.Line)
+    shape.setColor(0.5f, 0.5f, 0.9f, 1f)//Dibujar las originales del grafo
+    laristas.filter(_.triangulacion==false).toList.foreach(_.drawIntoShapeRenderer(shape))
+    shape.end()
+    shape.begin(ShapeType.Circle)//Dibujar vertices
     shape.setColor(0.5f, 0.9f, 0.5f, 1f)
     lvertices.foreach(_.drawIntoShapeRenderer(shape))
     shape.end()
