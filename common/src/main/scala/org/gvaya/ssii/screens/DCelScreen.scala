@@ -75,8 +75,8 @@ class DCelScreen(val game: MyGame) extends Screen {
     val salir: Button = new TextButton("Salir", skin)
     val reset: Button = new TextButton("Reiniciar", skin)
     window.add(next).fill(0, 0)
-    window.add(salir).fill(0, 0)
     window.add(reset).fill(0, 0)
+    window.add(salir).fill(0, 0)
 
     window.addListener(new ActorGestureListener {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
