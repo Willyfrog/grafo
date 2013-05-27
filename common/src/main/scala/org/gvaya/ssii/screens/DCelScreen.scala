@@ -100,7 +100,11 @@ class DCelScreen(val game: MyGame) extends Screen {
             dcel.addTriangulo
           }
           else
+          {
             Gdx.app.log("Next", "ya son todas triangulares")
+            game.d = dcel
+            game.setScreen(new CanonicalScreen(game))
+          }
         }
       }
     })

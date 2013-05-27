@@ -100,8 +100,8 @@ class DcelConstructor(val g: Grafo) {
     //generamos las aristas que cortaran la cara para formar un triangulo
     var eti = Util.genLabel()
     var nod:Array[Nodo] = Array[Nodo]()
-    var t1 = addEdge(caraO.arista.origin,siguiente.destiny, nod, eti,true)
-    var t2 = addEdge(siguiente.destiny, caraO.arista.origin, nod, eti,true)
+    var t1 = addEdge(caraO.arista.origin,siguiente.destiny, nod, eti, trianguladora = true)
+    var t2 = addEdge(siguiente.destiny, caraO.arista.origin, nod, eti, trianguladora = true)
     t1.inversa = t2
     t2.inversa = t1
     //enlazamos t1
@@ -185,7 +185,7 @@ class DcelConstructor(val g: Grafo) {
     shape.setColor(0.5f, 0.5f, 0.9f, 1f)//Dibujar las originales del grafo
     laristas.filter(_.triangulacion==false).toList.foreach(_.drawIntoShapeRenderer(shape))
     shape.end()
-    shape.begin(ShapeType.Circle)//Dibujar vertices
+    shape.begin(ShapeType.Filled)//Dibujar vertices
     shape.setColor(0.5f, 0.9f, 0.5f, 1f)
     lvertices.foreach(_.drawIntoShapeRenderer(shape))
     shape.end()

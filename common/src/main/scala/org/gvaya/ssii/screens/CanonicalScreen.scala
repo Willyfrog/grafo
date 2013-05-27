@@ -1,7 +1,6 @@
 package org.gvaya.ssii.screens
 
 import com.badlogic.gdx.{Gdx, Screen}
-import org.gvaya.ssii.grafo._
 import com.badlogic.gdx.graphics.{GL10, OrthographicCamera}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.ui._
@@ -9,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.{InputEvent, Stage}
 import com.badlogic.gdx.math.Vector3
 import org.gvaya.ssii.MyGame
 import org.gvaya.ssii.dcel._
+import org.gvaya.ssii.grafo.Util
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import math.min
 
@@ -66,7 +66,7 @@ class CanonicalScreen(val game: MyGame) extends Screen {
     window.row().fill().expandX()
     val next: Button = new TextButton("Siguiente", skin)
     val salir: Button = new TextButton("Salir", skin)
-    val reset: Button = new TextButton("Reiniciar", skin)
+    val reset: Button = new TextButton("Volver", skin)
     window.add(next).fill(0, 0)
     window.add(reset).fill(0, 0)
     window.add(salir).fill(0, 0)
@@ -96,8 +96,8 @@ class CanonicalScreen(val game: MyGame) extends Screen {
     reset.addListener(new ActorGestureListener {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
         event.cancel()
-        dcel = null
-        game.setScreen(new BaseScreen(game))
+        game.d = null // eliminamos el dcel y volvemos a la pantalla anterior
+        game.setScreen(new DCelScreen(game))
       }
     })
 

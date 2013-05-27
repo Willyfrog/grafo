@@ -56,7 +56,7 @@ class Grafo {
     shape.setColor(0f, 1f, 0.9f, 1f)
     for (a <- aristas) a.drawIntoShapeRenderer(shape)
     shape.end()
-    shape.begin(ShapeType.Circle)
+    shape.begin(ShapeType.Filled)
     shape.setColor(1f, 0f, 0.9f, 1f)
     for (v <- vertices) v.drawIntoShapeRenderer(shape)
     shape.end()

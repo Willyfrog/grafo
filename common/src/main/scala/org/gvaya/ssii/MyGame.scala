@@ -1,28 +1,15 @@
 package org.gvaya.ssii
 
-import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.graphics._
-import com.badlogic.gdx.Input.Buttons
-import glutils.ShapeRenderer
-import glutils.ShapeRenderer.ShapeType
-import dcel.DcelConstructor
-import com.badlogic.gdx.scenes.scene2d.utils.{DragListener, ActorGestureListener}
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
-import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
-import com.badlogic.gdx.Input.Buttons
-import math.min
-import com.badlogic.gdx.scenes.scene2d.ui._
-import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.{Actor, Stage, InputEvent}
-import com.badlogic.gdx.{Game, Gdx}
+import com.badlogic.gdx.Game
 import grafo._
 import org.gvaya.ssii.screens.BaseScreen
+import org.gvaya.ssii.dcel.DcelConstructor
+import org.gvaya.ssii.canograph.CGrafo
 
 class MyGame extends Game {
   var g: Grafo = null //grafo que pasaremos entre screens
+  var d: DcelConstructor = null
+  var c: CGrafo = null
 
   def needsGL20(): Boolean = false
 

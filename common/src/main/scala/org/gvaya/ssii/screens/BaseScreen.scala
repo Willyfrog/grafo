@@ -73,9 +73,14 @@ class BaseScreen(var game: MyGame) extends Screen {
     next.addListener(new ActorGestureListener {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
         event.cancel()
-        Gdx.app.log("NEXT", "Vertices: " + game.g.vertices.foldLeft("")((str:String, v:Vertice)=> str + ", " + v.etiqueta))
-        Gdx.app.log("NEXT", "Aristas: " + game.g.aristas.foldLeft("")((str:String, v:Arista)=> str + ", " + v.etiqueta))
-        game.setScreen(new DCelScreen(game))
+        if (game.g.aristas.length != 0) {
+          Gdx.app.log("NEXT", "Vertices: " + game.g.vertices.foldLeft("")((str:String, v:Vertice)=> str + ", " + v.etiqueta))
+          Gdx.app.log("NEXT", "Aristas: " + game.g.aristas.foldLeft("")((str:String, v:Arista)=> str + ", " + v.etiqueta))
+          game.setScreen(new DCelScreen(game))
+        }
+        else {
+          Gdx.app.log("Next", "No graph no cookie!")
+        }
       }
     })
     salir.addListener(new ActorGestureListener {
