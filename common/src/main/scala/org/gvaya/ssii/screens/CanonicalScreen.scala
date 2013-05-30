@@ -11,6 +11,7 @@ import org.gvaya.ssii.dcel._
 import org.gvaya.ssii.grafo.Util
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import math.min
+import org.gvaya.ssii.canograph.CGrafo
 
 
 /**
@@ -33,6 +34,8 @@ class CanonicalScreen(val game: MyGame) extends Screen {
   var stage: Stage = null
   var loading: Boolean = true
 
+  var cg: CGrafo = null
+
   /**
    *
    * @param delta
@@ -43,6 +46,7 @@ class CanonicalScreen(val game: MyGame) extends Screen {
 
     cam.update()
     cam.apply(Gdx.gl10) //TODO: buscar que hace esta linea!
+    cg.drawIntoShapeRenderer(shape)
 
     stage.act(min(delta, 1 / 50f))
     stage.draw()
@@ -88,7 +92,8 @@ class CanonicalScreen(val game: MyGame) extends Screen {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
         event.cancel()
         if (!loading){
-	  true
+          cg.paso()
+
         }
       }
     })
@@ -107,6 +112,7 @@ class CanonicalScreen(val game: MyGame) extends Screen {
 
     try
     {
+      cg = new CGrafo(game.d)
       loading = false //hemos terminado de cargar, podemos usar los botones
     }
     catch{
