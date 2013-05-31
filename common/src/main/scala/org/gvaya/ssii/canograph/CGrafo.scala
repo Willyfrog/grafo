@@ -33,8 +33,10 @@ class CGrafo (val dcel: DcelConstructor){
   }
 
   def moveVertex(v:CVertice) {
-    pendingVertices.remove(pendingVertices.indexOf(v))
-    vertices.append(v)
+    try {
+      pendingVertices -= v
+      vertices.append(v)
+    }
     v.orden = order
     order += 1
     for (v <- aristas.filter(x=> x.origen.etiqueta==v.etiqueta || x.destino.etiqueta==v.etiqueta).map(y=> if (y.origen.etiqueta !=v.etiqueta) y.origen else y.destino) ) {
@@ -48,20 +50,15 @@ class CGrafo (val dcel: DcelConstructor){
    * e.o.c. cogemos el mas apto
    */
   def paso() {
-    print("pasito\r\n")
     if (vertices.isEmpty) {
-      print("vacio\r\n")
-      for (a <- aristas) {
-        if (! a.triangular){
-          moveVertex(a.origen)
-          moveVertex(a.destino)
-        }
-      }
+      var a = aristas.filter(x => !(x.triangular))(0)
+      moveVertex(a.origen)
+      moveVertex(a.destino)
     }
     else {
       var v:CVertice = null
       if (pendingVertices.isEmpty)
-        print("Fin")
+        print("Fin ordenacion")
       else if (pendingVertices.length > 1) {
         v = pendingVertices.fold(pendingVertices(0))((x:CVertice,y:CVertice)=> if (x.valor>=y.valor) x else y)
         moveVertex(v)

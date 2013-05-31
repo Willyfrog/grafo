@@ -2,6 +2,7 @@ package org.gvaya.ssii.canograph
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
+import com.badlogic.gdx.graphics.Color
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,14 +24,22 @@ class CVertice(x: Float, y: Float, val etiqueta: String, var valor: Int=0) exten
    * dibuja el vértice en el shaperenderer
    * @param shape Shaperenderer en el que dibujar
    */
+
+  def getColor:Color = {
+    var genpallete = "FFFFFFFF"
+    if (orden != 0) {
+      //genpallete = String.padStart(Integer.toHexString((orden*33)%16777215) + "FF" //intento de generar una paleta de colores distinguibles: http://www.hitmill.com/html/color_safe.html
+      genpallete = "%06x".format((orden*33)%16777215) + "FF"
+    }
+    //println(genpallete)
+    Color.valueOf(genpallete)
+  }
+
   def drawIntoShapeRenderer(shape: ShapeRenderer) {
     shape.begin(ShapeType.Filled)
-    if (orden == 0) {
-      shape.setColor(0.6f, 0.6f, 0.6f, 1f)
-    } else {
-      shape.setColor(0.9f, 0.0f, 0.9f, 1f)
-    }
-    shape.circle(x, y, 3.0f)
+    shape.setColor(getColor)
+    val rad = if (orden>0) 5.0f else 3.0f
+    shape.circle(x, y, rad)
     shape.end()
   }
 
