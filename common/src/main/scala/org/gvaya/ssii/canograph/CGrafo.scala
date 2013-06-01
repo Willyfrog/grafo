@@ -19,7 +19,7 @@ class CGrafo (val dcel: DcelConstructor){
   var vertices: ArrayBuffer[CVertice] = new ArrayBuffer[CVertice]()
   var pendingVertices: ArrayBuffer[CVertice] = new ArrayBuffer[CVertice]()
   val aristas: ArrayBuffer[CArista] = new ArrayBuffer[CArista]()
-  var order: Int = 1
+  var order: Int = 0
 
   for (vert <- dcel.lvertices) {
     pendingVertices.append(new CVertice(vert.x, vert.y, vert.label))
@@ -42,6 +42,7 @@ class CGrafo (val dcel: DcelConstructor){
     for (v <- aristas.filter(x=> x.origen.etiqueta==v.etiqueta || x.destino.etiqueta==v.etiqueta).map(y=> if (y.origen.etiqueta !=v.etiqueta) y.origen else y.destino) ) {
       v.valor += 1
     }
+    println(v.getColor.toString)
   }
 
   /**

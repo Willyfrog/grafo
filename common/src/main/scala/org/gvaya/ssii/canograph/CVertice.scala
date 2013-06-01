@@ -19,21 +19,32 @@ import com.badlogic.gdx.graphics.Color
  * @param etiqueta Nombre del vértice
  */
 class CVertice(x: Float, y: Float, val etiqueta: String, var valor: Int=0) extends CNodo(x, y) {
-  var orden: Int = 0
+  var orden: Int = -1
+
   /**
-   * dibuja el vértice en el shaperenderer
-   * @param shape Shaperenderer en el que dibujar
+   * Si no tiene orden, pinta de blanco el nodo. Si lo tiene, entonces intenta genarar un color de una paleta considerada como distinguible:
+   * http://www.hitmill.com/html/color_safe.html
+   * @return Color
    */
 
   def getColor:Color = {
     var genpallete = "FFFFFFFF"
-    if (orden != 0) {
-      //genpallete = String.padStart(Integer.toHexString((orden*33)%16777215) + "FF" //intento de generar una paleta de colores distinguibles: http://www.hitmill.com/html/color_safe.html
-      genpallete = "%06x".format((orden*33)%16777215) + "FF"
+    if (orden != -1) {
+      val safeorder = (orden % 214) + 1 // no queremos ni blanco ni negro
+      // convertimos a base 6 y despues multiplicamos por 51 (33 hex) cada digito para generar la paleta mencionada en el articulo
+      val u = (safeorder % 6) * 51
+      val d = ((safeorder / 6) % 6) * 51
+      val c = ((safeorder / 36) % 6) * 51
+      genpallete = "%02x".format(c) + "%02x".format(d) + "%02x".format(u) + "FF"
     }
     //println(genpallete)
     Color.valueOf(genpallete)
   }
+
+  /**
+   * dibuja el vértice en el shaperenderer
+   * @param shape Shaperenderer en el que dibujar
+   */
 
   def drawIntoShapeRenderer(shape: ShapeRenderer) {
     shape.begin(ShapeType.Filled)
