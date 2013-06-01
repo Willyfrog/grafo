@@ -49,7 +49,7 @@ class CVertice(x: Float, y: Float, val etiqueta: String, var valor: Int=0) exten
   def drawIntoShapeRenderer(shape: ShapeRenderer) {
     shape.begin(ShapeType.Filled)
     shape.setColor(getColor)
-    val rad = if (orden>0) 5.0f else 3.0f
+    val rad = if (orden>=0) 5.0f else 3.0f
     shape.circle(x, y, rad)
     shape.end()
   }
