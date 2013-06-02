@@ -1,1 +1,9 @@
-Generación de grafo en su version planar dado uno dibujado
+Visualicaión de grafo en su version planar dado uno dibujado
+------------------------------------------------------------
+
+La documentación está en formato odt y pdf en la carpeta doc, en el mismo estado en el que se entregó para la memoria final.
+
+Existe una version ya compilada incluyendo dependencias en:
+
+https://dl.dropboxusercontent.com/u/3776107/grafo_ssii_2013.jar
+
