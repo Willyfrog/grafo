@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui._
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, Stage}
 import com.badlogic.gdx.math.Vector3
 import org.gvaya.ssii.MyGame
-import org.gvaya.ssii.grafo.Util
+import org.gvaya.ssii.grafo.{Grafo, Util}
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import org.gvaya.ssii.canograph.CGrafo
 import math.min
@@ -71,6 +71,9 @@ class DrawingScreen(val game: MyGame) extends Screen {
     val next: Button = new TextButton("Siguiente", skin)
     val salir: Button = new TextButton("Salir", skin)
     val reset: Button = new TextButton("Volver", skin)
+    val reinit: Button = new TextButton("Reiniciar", skin)
+
+    window.add(reinit).fill(0, 0)
     window.add(reset).fill(0, 0)
     window.add(next).fill(0, 0)
     window.add(salir).fill(0, 0)
@@ -109,6 +112,20 @@ class DrawingScreen(val game: MyGame) extends Screen {
         game.setScreen(new CanonicalScreen(game))
       }
     })
+
+    //reiniciamos la escena de vuelta a dibujar el grafo inicial
+    reinit.addListener(new ActorGestureListener {
+      override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
+        event.cancel()
+        game.c = null // eliminamos todos y volvemos a la pantalla inicial
+        game.d = null
+        game.g = new Grafo
+        game.setScreen(new BaseScreen(game))
+      }
+    })
+
+
+
 
     window.pack()
     stage.addActor(window)

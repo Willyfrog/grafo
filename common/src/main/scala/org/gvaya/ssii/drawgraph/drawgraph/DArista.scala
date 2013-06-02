@@ -16,7 +16,7 @@ import collection.mutable.ArrayBuffer
  * @param origen Vertice de origen
  * @param destino Vertice de destino
  */
-class DArista(val origen: DVertice, val destino: DVertice, val eti:String, val triangular:Boolean=false) {
+class DArista(val origen: DVertice, val destino: DVertice, val eti:String, val triangular:Boolean) {
   var mesh: Mesh = null
 
   /**

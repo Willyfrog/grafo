@@ -49,11 +49,13 @@ class DVertice(x: Float, y: Float, val etiqueta: String, val orden: Int, var sho
     if (show) {
       shape.begin(ShapeType.Filled)
       shape.setColor(getColor)
-      shape.circle(x, y, 5.0f)
+      shape.circle(this.x, this.y, 5.0f)
       shape.end()
     }
 
   }
 
-
+  def compare(that: DVertice) = {
+    this.orden - that.orden
+  }
 }

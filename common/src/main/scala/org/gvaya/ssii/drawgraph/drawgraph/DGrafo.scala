@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import collection.mutable.ArrayBuffer
 import org.gvaya.ssii.canograph.CGrafo
+import org.gvaya.ssii.grafo.Util
+import scala.util.Sorting
+import com.badlogic.gdx.Gdx
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,9 +19,8 @@ import org.gvaya.ssii.canograph.CGrafo
  */
 class DGrafo (val cangraph: CGrafo){
   var vertices: ArrayBuffer[DVertice] = new ArrayBuffer[DVertice]()
-  var pendingVertices: ArrayBuffer[DVertice] = new ArrayBuffer[DVertice]()
-  val aristas: ArrayBuffer[DArista] = new ArrayBuffer[DArista]()
-  var order: Int = 0
+  var aristas: ArrayBuffer[DArista] = new ArrayBuffer[DArista]()
+  var inicial:Boolean = true //el primer paso es diferente del resto
 
   for (vert <- cangraph.vertices) {
     vertices.append(new DVertice(vert.x, vert.y, vert.etiqueta, vert.orden, false))
@@ -28,9 +30,13 @@ class DGrafo (val cangraph: CGrafo){
       aristas.append(new DArista(verts(0), verts(1), aris.eti, aris.triangular))
     }
 
-  def showVertex(v:DVertice) {
+  def showVertex(v:DVertice, new_x:Int, new_y:Int) {
+    v.x = Util.POS_INICIAL_X + Util.INCREMENTO * new_x
+    v.y = Util.POS_INICIAL_Y + Util.INCREMENTO * new_y
     v.show = true
   }
+
+  vertices = vertices.sortWith((x, y) => x.orden <= y.orden)
 
   /**
    * Habra termnado cuando todos los vertices esten visibles
@@ -45,13 +51,28 @@ class DGrafo (val cangraph: CGrafo){
    */
   def paso() {
     if (! ended) {
-      val hidden = vertices.filter(v => v.show == false)
-      var v = hidden.fold(hidden(0))((v:DVertice, w:DVertice) => if (v.orden >= w.orden) v else w) //sacamos el siguiente ordenado
-      showVertex(v)
-      print ("Vertice " + v.etiqueta + " esta ahora como " + v.show)
+      if (inicial) {
+        showVertex(vertices(0), 0, 0)
+        showVertex(vertices(1), 2, 0)
+        showVertex(vertices(2), 1, 1)
+        inicial = false
+
+        for (v <- vertices)
+          Gdx.app.log("Debug", "coordenadas :" + v.coordenadas() + "para orden: " + v.orden)
+
+      } else {
+        val hidden = vertices.filter(v => v.show == false)
+        var v = hidden.fold(hidden(0))((v:DVertice, w:DVertice) => if (v.orden >= w.orden) v else w) //sacamos el siguiente ordenado
+        //showVertex(v)
+        v.show = true
+        Gdx.app.log("Debug", "Vertice " + v.etiqueta + " esta ahora como " + v.show)
+      }
     }
-    else
+    else {
+      removeTriangulares()
       print("Fin")
+    }
+
   }
 
   /**
@@ -59,7 +80,7 @@ class DGrafo (val cangraph: CGrafo){
    * No se puede deshacer
    */
   def removeTriangulares() {
-    aristas = aristas.filter(a => !(a.triagular))
+    aristas = aristas.filter(a => !(a.triangular))
   }
 
   /**

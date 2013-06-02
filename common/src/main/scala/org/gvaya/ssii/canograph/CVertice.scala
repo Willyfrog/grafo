@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.Color
  * @param y Posicion en el eje y
  * @param etiqueta Nombre del vértice
  */
-class CVertice(x: Float, y: Float, val etiqueta: String, var valor: Int=0) extends CNodo(x, y) {
+class CVertice(x: Float, y: Float, val etiqueta: String, var valor: Int = -1) extends CNodo(x, y) {
   var orden: Int = -1
 
   /**

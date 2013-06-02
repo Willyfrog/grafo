@@ -53,4 +53,9 @@ object Util {
     else
       angle%(2*math.Pi)
   }
+
+  val POS_INICIAL_X=20.0f
+  val POS_INICIAL_Y=20.0f
+  val INCREMENTO=10.0f
+
 }

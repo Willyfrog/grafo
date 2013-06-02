@@ -3,7 +3,8 @@ package org.gvaya.ssii.canograph
 import collection.mutable.ArrayBuffer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
-import org.gvaya.ssii.dcel.{Vertex, DcelConstructor}
+import org.gvaya.ssii.dcel.{Edge, Vertex, DcelConstructor}
+import com.badlogic.gdx.Gdx
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,24 +26,70 @@ class CGrafo (val dcel: DcelConstructor){
     pendingVertices.append(new CVertice(vert.x, vert.y, vert.label))
   }
   for (aris <- dcel.laristas) {
-    if (!aristas.exists(a => a.etiqueta == aris.inversa.label)) {
+    if (!aristas.exists((a:CArista) => (a.origen.etiqueta == aris.destino && a.destino.etiqueta == aris.origen ||
+                                     a.destino.etiqueta == aris.destino && a.origen.etiqueta == aris.origen) )) {
       val verts = pendingVertices.filter(v => v.etiqueta==aris.origen || v.etiqueta==aris.destino) //recuperamos los dos vertices
       aristas.append(new CArista(verts(0), verts(1), aris.label, aris.triangulacion))
     }
-
   }
+  /*for (aris <- aristas)
+    Gdx.app.log("DEBUG", "arista " + aris.etiqueta + " - o: " + aris.origen.etiqueta + " d: " + aris.destino.etiqueta)
+    */
 
   def moveVertex(v:CVertice) {
-    try {
-      pendingVertices -= v
-      vertices.append(v)
-    }
+    pendingVertices -= v
+    vertices.append(v)
     v.orden = order
     order += 1
-    for (v <- aristas.filter(x=> x.origen.etiqueta==v.etiqueta || x.destino.etiqueta==v.etiqueta).map(y=> if (y.origen.etiqueta !=v.etiqueta) y.origen else y.destino) ) {
+    /*for (v <- aristas.filter(x=> x.origen.etiqueta==v.etiqueta || x.destino.etiqueta==v.etiqueta).map(y=> if (y.origen.etiqueta !=v.etiqueta) y.origen else y.destino) ) {
       v.valor += 1
-    }
+    } */
+    processVertex(v)
     println(v.getColor.toString)
+  }
+
+  def getNeighbours(v:CVertice):ArrayBuffer[CVertice] = {
+    val arislist = aristas.filter(a => a.origen.etiqueta == v.etiqueta || a.destino.etiqueta == v.etiqueta)
+
+    arislist.map(x => if (x.origen.etiqueta != v.etiqueta) x.origen else x.destino)
+  }
+
+  def processVertex(v:CVertice) {
+    Gdx.app.log("DEBUG", "processing " + v.etiqueta)
+    val neighbourlist = getNeighbours(v)
+    var neig = ""
+    for (n <- neighbourlist) {
+       neig = neig + " " + n.etiqueta
+    }
+    Gdx.app.log("DEBUG", "neighbours " + neig)
+    val orderedList = neighbourlist.filter(x => x.orden > -1)
+    val vlist = neighbourlist.filter(x => x.orden == -1)
+    for (w <- vlist) {
+      Gdx.app.log("DEBUG", w.etiqueta + " had value " + w.valor)
+      if (w.valor == -1) {
+        w.valor = 0
+      } else if (w.valor == 0) {
+        val n = (getNeighbours(w)).filter(x => x.orden > -1)(0) //si es 0, solo puede tener 1
+        if (orderedList.exists(p => p.etiqueta == n.etiqueta))
+          w.valor = 1
+        else
+          w.valor = 2
+      } else {
+        val ns = (getNeighbours(w)).filter(x => x.orden > -1)
+        var vecs = ""
+        for (dn <- ns)
+          vecs = vecs + " " + dn.etiqueta
+        Gdx.app.log("DEBUG", "vecinos " + vecs)
+        val matches = orderedList.count(p => (p.etiqueta == ns(0).etiqueta || p.etiqueta == ns(1).etiqueta))
+        Gdx.app.log("DEBUG", "matches " + matches)
+        if (matches == 2) {
+          w.valor -= 1
+        } else if (matches == 0) {
+          w.valor += 1
+        }
+      }
+      Gdx.app.log("DEBUG", w.etiqueta + " has value " + w.valor)
+    }
   }
 
   def ended: Boolean = pendingVertices.isEmpty
@@ -62,7 +109,8 @@ class CGrafo (val dcel: DcelConstructor){
       if (pendingVertices.isEmpty)
         print("Fin ordenacion")
       else if (pendingVertices.length > 1) {
-        v = pendingVertices.fold(pendingVertices(0))((x:CVertice,y:CVertice)=> if (x.valor>=y.valor) x else y)
+        //v = pendingVertices.fold(pendingVertices(0))((x:CVertice,y:CVertice)=> if (x.valor>=y.valor) x else y)
+        v = pendingVertices.find(x => x.valor==1).get
         moveVertex(v)
       }
       else {
