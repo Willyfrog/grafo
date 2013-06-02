@@ -7,11 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui._
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, Stage}
 import com.badlogic.gdx.math.Vector3
 import org.gvaya.ssii.MyGame
-import org.gvaya.ssii.dcel._
 import org.gvaya.ssii.grafo.Util
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
-import math.min
 import org.gvaya.ssii.canograph.CGrafo
+import math.min
+import org.gvaya.ssii.drawgraph.DGrafo
 
 
 /**
@@ -22,7 +22,7 @@ import org.gvaya.ssii.canograph.CGrafo
  * Screen para la ordenacion canonica
  * @param game Clase principal
  */
-class CanonicalScreen(val game: MyGame) extends Screen {
+class DrawingScreen(val game: MyGame) extends Screen {
   var cam: OrthographicCamera = null
   var unprojectedVertex: Vector3 = new Vector3()
   var shape: ShapeRenderer = null
@@ -34,11 +34,11 @@ class CanonicalScreen(val game: MyGame) extends Screen {
   var stage: Stage = null
   var loading: Boolean = true
 
-  var cg: CGrafo = null
+  var dg: DGrafo = null
 
   /**
    *
-   * @param delta interval between this run and the last one
+   * @param delta
    */
   def render(delta: Float) {
     Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f)
@@ -46,7 +46,7 @@ class CanonicalScreen(val game: MyGame) extends Screen {
 
     cam.update()
     cam.apply(Gdx.gl10) //TODO: buscar que hace esta linea!
-    cg.drawIntoShapeRenderer(shape)
+    dg.drawIntoShapeRenderer(shape)
 
     stage.act(min(delta, 1 / 50f))
     stage.draw()
@@ -55,7 +55,7 @@ class CanonicalScreen(val game: MyGame) extends Screen {
   def resize(p1: Int, p2: Int) {}
 
   def show() {
-    Gdx.app.log("Info", "Inicializando pantalla Canonical ordering")
+    Gdx.app.log("Info", "Inicializando pantalla Drawing")
     cam = new OrthographicCamera(Gdx.graphics.getWidth, Gdx.graphics.getHeight)
     cam.setToOrtho(false, Util.WIDTH, Util.HEIGHT)
     shape = new ShapeRenderer()
@@ -74,6 +74,7 @@ class CanonicalScreen(val game: MyGame) extends Screen {
     window.add(reset).fill(0, 0)
     window.add(next).fill(0, 0)
     window.add(salir).fill(0, 0)
+
     window.addListener(new ActorGestureListener {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
         event.cancel()
@@ -91,14 +92,12 @@ class CanonicalScreen(val game: MyGame) extends Screen {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
         event.cancel()
         if (!loading){
-          if (! cg.ended)
-            cg.paso()
-          else {
-            Gdx.app.log("Info", "Fin ordenacion canonica")
-            game.c = cg
-            game.setScreen(new DrawingScreen(game))
-          }
-
+          Gdx.app.log("Debug", "pasito")
+          dg.paso()
+        }
+        else {
+          Gdx.app.log("Debug", "no pasito")
+          dg.removeTriangulares()
         }
       }
     })
@@ -106,8 +105,8 @@ class CanonicalScreen(val game: MyGame) extends Screen {
     reset.addListener(new ActorGestureListener {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
         event.cancel()
-        game.d = null // eliminamos el dcel y volvemos a la pantalla anterior
-        game.setScreen(new DCelScreen(game))
+        game.c = null // eliminamos el dcel y volvemos a la pantalla anterior
+        game.setScreen(new CanonicalScreen(game))
       }
     })
 
@@ -115,18 +114,8 @@ class CanonicalScreen(val game: MyGame) extends Screen {
     stage.addActor(window)
     Gdx.input.setInputProcessor(stage)
 
-    try
-    {
-      cg = new CGrafo(game.d)
-      loading = false //hemos terminado de cargar, podemos usar los botones
-    }
-    catch{
-      case e:DcelConstructorException => {
-        Gdx.app.exit()
-      }
-
-    }
-
+    dg = new DGrafo(game.c)
+    loading = false //hemos terminado de cargar, podemos usar los botones
   }
 
   def hide() {}

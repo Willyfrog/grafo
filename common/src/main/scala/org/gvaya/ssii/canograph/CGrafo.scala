@@ -45,6 +45,7 @@ class CGrafo (val dcel: DcelConstructor){
     println(v.getColor.toString)
   }
 
+  def ended: Boolean = pendingVertices.isEmpty
   /**
    * damos un paso en el algoritmo
    * si no hay vertices, seleccionamos una arista no triangulante y empezamos por esos 2
